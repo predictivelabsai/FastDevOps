@@ -46,11 +46,30 @@ class Coolify:
     def application(self, uuid: str) -> dict:
         return self.request("GET", f"/applications/{uuid}") or {}
 
+    def create_public_application(self, body: dict) -> dict:
+        return self.request("POST", "/applications/public", body) or {}
+
+    def update_application(self, uuid: str, body: dict) -> dict:
+        return self.request("PATCH", f"/applications/{uuid}", body) or {}
+
+    def storages(self, uuid: str) -> list[dict]:
+        result = self.request("GET", f"/applications/{uuid}/storages") or {}
+        return result.get("persistent_storages", [])
+
+    def create_storage(self, uuid: str, name: str, mount_path: str) -> dict:
+        return self.request(
+            "POST",
+            f"/applications/{uuid}/storages",
+            {"type": "persistent", "name": name, "mount_path": mount_path},
+        ) or {}
+
     def environment_names(self, uuid: str) -> list[str]:
         rows = self.request("GET", f"/applications/{uuid}/envs") or []
         return sorted(row.get("key", "") for row in rows if row.get("key"))
 
     def sync_environment(self, uuid: str, variables: dict[str, str]) -> None:
+        if not variables:
+            return
         data = [
             {
                 "key": key,
@@ -64,4 +83,4 @@ class Coolify:
         self.request("PATCH", f"/applications/{uuid}/envs/bulk", {"data": data})
 
     def deploy(self, uuid: str) -> dict:
-        return self.request("POST", f"/applications/{uuid}/restart") or {}
+        return self.request("POST", f"/applications/{uuid}/start") or {}

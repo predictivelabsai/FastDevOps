@@ -30,3 +30,183 @@ services:
         FASTFUNNEL_PORT: "5005"
         FASTFUNNEL_BASE_URL: https://funnel.fastsme.com
         FASTFUNNEL_DEV_AUTH_BYPASS: "0"
+  fastclinic:
+    repo: predictivelabsai/FastClinic
+    local_dir: FastClinic
+    port: 5005
+    domain: https://clinic.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTCLINIC_PORT: "5005", FASTCLINIC_DB: /data/fastclinic.sqlite, MODEL_PROVIDER: xai}
+  fastcms:
+    repo: predictivelabsai/FastCMS
+    local_dir: FastCMS
+    port: 5001
+    domain: https://cms.fastsme.com
+    health: {path: /}
+    build: {type: nixpacks, start_command: python main.py}
+    volume: /app/data
+    env: {required: [], runtime: {PORT: "5001"}}
+  fastcrm:
+    repo: predictivelabsai/FastCRM
+    local_dir: FastCRM
+    port: 5006
+    domain: https://crm.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTCRM_PORT: "5006", FASTCRM_DB: /data/fastcrm.sqlite, MODEL_PROVIDER: xai}
+  fastdocs:
+    repo: predictivelabsai/FastDocs
+    local_dir: FastDocs
+    port: 5016
+    domain: https://docs.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTDOCS_PORT: "5016", FASTDOCS_DB: /data/fastdocs.sqlite, MODEL_PROVIDER: xai}
+  fastdrive:
+    repo: predictivelabsai/FastDrive
+    local_dir: FastDrive
+    port: 5012
+    domain: https://drive.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTDRIVE_PORT: "5012", FASTDRIVE_DB: /data/fastdrive.sqlite, MODEL_PROVIDER: xai}
+  fasterp:
+    repo: predictivelabsai/FastERP
+    local_dir: FastERP
+    port: 5011
+    domain: https://erp.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTERP_PORT: "5011", FASTERP_DB: /data/fasterp.sqlite, MODEL_PROVIDER: xai}
+  fastesm:
+    repo: predictivelabsai/FastESM
+    local_dir: FastESM
+    branch: master
+    port: 5015
+    domain: https://esm.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTESM_PORT: "5015", FASTESM_DB: /data/fastesm.sqlite, MODEL_PROVIDER: xai}
+  fastfund:
+    repo: predictivelabsai/FastFund
+    local_dir: FastFund
+    port: 5011
+    domain: https://fund.fastsme.com
+    health: {path: /health}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {DATA_STORAGE: sqlite, DB_URL: "sqlite:////data/fastfund.sqlite", DOC_LOCAL_DIR: /data/docs, LLM_PROVIDER: xai, FASTFUND_AUTOSEED: "1"}
+  fasthelpdesk:
+    repo: predictivelabsai/FastHelpdesk
+    local_dir: FastHelpdesk
+    port: 5007
+    domain: https://helpdesk.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTHELPDESK_PORT: "5007", FASTHELPDESK_DB: /data/fasthelpdesk.sqlite, MODEL_PROVIDER: xai}
+  fasthrm:
+    repo: predictivelabsai/FastHRM
+    local_dir: FastHRM
+    port: 5010
+    domain: https://hrm.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTHR_PORT: "5010", FASTHR_DB: /data/fasthr.sqlite, MODEL_PROVIDER: xai}
+  fastinsights:
+    repo: predictivelabsai/FastInsights
+    local_dir: FastInsights
+    port: 5008
+    domain: https://insights.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTINSIGHTS_PORT: "5008", FASTINSIGHTS_DB: /data/fastinsights.sqlite, MODEL_PROVIDER: xai}
+  fastinsure:
+    repo: kaljuvee/insurance-demo
+    local_dir: FastInsure
+    port: 8501
+    domain: https://insure.fastsme.com
+    health: {path: /_stcore/health}
+    build: {type: nixpacks, start_command: "streamlit run Home.py --server.address 0.0.0.0 --server.port 8501"}
+    env: {required: [], runtime: {}}
+  fastlms:
+    repo: predictivelabsai/FastLMS
+    local_dir: FastLMS
+    port: 5001
+    domain: https://lms.fastsme.com
+    health: {path: /healthz}
+    build: {type: nixpacks, start_command: "python main.py --host 0.0.0.0 --port 5001"}
+    volume: /data
+    database: fastlms-postgres
+    env:
+      required: [XAI_API_KEY]
+      runtime: {MODEL_PROVIDER: xai}
+  fastmail:
+    repo: predictivelabsai/FastMail
+    local_dir: FastMail
+    port: 5009
+    domain: https://mail.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTMAIL_PORT: "5009", FASTMAIL_DB: /data/fastmail.sqlite, MODEL_PROVIDER: xai}
+  fastmeet:
+    repo: predictivelabsai/FastMeet
+    local_dir: FastMeet
+    port: 5015
+    domain: https://meet.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTMEET_PORT: "5015", FASTMEET_DB: /data/fastmeet.sqlite, MODEL_PROVIDER: xai}
+  fastppm:
+    repo: predictivelabsai/FastPPM
+    local_dir: FastPPM
+    port: 5012
+    domain: https://ppm.fastsme.com
+    health: {path: /health}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {DATA_STORAGE: sqlite, DB_URL: "sqlite:////data/fastppm.sqlite", UPLOAD_DIR: /data/uploads, LLM_PROVIDER: xai}
+  fastsheets:
+    repo: predictivelabsai/FastSheets
+    local_dir: FastSheets
+    port: 5014
+    domain: https://sheets.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTSHEETS_PORT: "5014", FASTSHEETS_DB: /data/fastsheets.sqlite, MODEL_PROVIDER: xai}
+  fastslides:
+    repo: predictivelabsai/FastSlides
+    local_dir: FastSlides
+    port: 5013
+    domain: https://slides.fastsme.com
+    health: {path: /}
+    volume: /data
+    env:
+      required: [XAI_API_KEY]
+      runtime: {FASTSLIDES_PORT: "5013", FASTSLIDES_DB: /data/fastslides.sqlite, MODEL_PROVIDER: xai}

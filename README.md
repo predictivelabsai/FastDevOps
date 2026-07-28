@@ -4,11 +4,10 @@ Deployment orchestration for the public `predictivelabsai/Fast*` repositories.
 Coolify is the primary runtime; a config-driven Pulumi program keeps a GCP
 Cloud Run migration path available.
 
-## First service
+## Service fleet
 
-| Service | Repository | Container port | Production domain | Health |
-|---|---|---:|---|---|
-| `fastfunnel` | `predictivelabsai/fastfunnel` | 5005 | `https://funnel.fastsme.com` | `GET /healthz` |
+The catalog in `config/services.yaml` defines the 19 FastSME applications.
+`data/fast-domains.csv` is the DNS/source inventory used to audit that catalog.
 
 ## Setup
 
@@ -28,11 +27,16 @@ python cli.py doctor
 python cli.py status fastfunnel
 python cli.py env fastfunnel
 python cli.py env fastfunnel --sync
+python cli.py provision --yes
+python cli.py deploy --yes
 ```
 
 The CLI loads `COOLIFY_API_TOKEN` and an optional `COOLIFY_BASE_URL` from the
 ignored local `.env`. The CLI defaults to read-only operations. Deployment and environment writes
 require an explicit command and confirmation; `--yes` is intended for CI.
+Provisioning is idempotent: existing applications are reconciled, missing
+applications and declared persistent volumes are created, and FastFunnel's
+hand-tuned configuration is preserved.
 
 ## CI/CD model
 

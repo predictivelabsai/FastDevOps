@@ -2,4 +2,7 @@ provider: coolify
 coolify:
   base_url: https://coolify.fastsme.com
   project: FastSME
+  project_uuid: no3022559e9zb2huhzctjbx6
+  environment_uuid: quhtxh5lo01mrdubxks3qh6p
   server: localhost
+  server_uuid: wnvv7cbm0rihww5o1r9b4j0z

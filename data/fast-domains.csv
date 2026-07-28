@@ -1,0 +1,20 @@
+A record,Domain(s),IP,Local,Remote,Landing page model repo / colour scheme
+funnel,funnel.fastsme.com,191.218.164.166,dev/fastco/FastFunnel,https://github.com/predictivelabsai/FastFunnel,dev/plai/carhero
+clinic,clinic.fastsme.com,191.218.164.166,dev/fastco/FastClinic,https://github.com/predictivelabsai/FastClinic,dev/plai/carhero
+cms,cms.fastsme.com,191.218.164.166,dev/fastco/FastCMS,https://github.com/predictivelabsai/FastCMS,dev/plai/carhero
+crm,crm.fastsme.com,191.218.164.166,dev/fastco/FastCRM,https://github.com/predictivelabsai/FastCRM,dev/plai/carhero
+docs,docs.fastsme.com,191.218.164.166,dev/fastco/FastDocs,https://github.com/predictivelabsai/FastDocs,dev/plai/carhero
+drive,drive.fastsme.com,191.218.164.166,dev/fastco/FastDrive,https://github.com/predictivelabsai/FastDrive,dev/plai/carhero
+erp,erp.fastsme.com,191.218.164.166,dev/fastco/FastERP,https://github.com/predictivelabsai/FastERP,dev/plai/carhero
+esm,esm.fastsme.com,191.218.164.166,dev/fastco/FastESM,https://github.com/predictivelabsai/FastESM,dev/plai/carhero
+fund,fund.fastsme.com,191.218.164.166,dev/fastco/FastFund,https://github.com/predictivelabsai/FastFund,dev/plai/carhero
+helpdesk,helpdesk.fastsme.com,191.218.164.166,dev/fastco/FastHelpdesk,https://github.com/predictivelabsai/FastHelpdesk,dev/plai/carhero
+hrm,hrm.fastsme.com,191.218.164.166,dev/fastco/FastHRM,https://github.com/predictivelabsai/FastHRM,dev/plai/carhero
+insights,insights.fastsme.com,191.218.164.166,dev/fastco/FastInsights,https://github.com/predictivelabsai/FastInsights,dev/plai/carhero
+insure,insure.fastsme.com,191.218.164.166,dev/fastco/FastInsure,https://github.com/predictivelabsai/FastInsure,dev/plai/carhero
+lms,lms.fastsme.com,191.218.164.166,dev/fastco/FastLMS,https://github.com/predictivelabsai/FastLMS,dev/plai/carhero
+mail,mail.fastsme.com,191.218.164.166,dev/fastco/FastMail,https://github.com/predictivelabsai/FastMail,dev/plai/carhero
+meet,meet.fastsme.com,191.218.164.166,dev/fastco/FastMeet,https://github.com/predictivelabsai/FastMeet,dev/plai/carhero
+ppm,ppm.fastsme.com,191.218.164.166,dev/fastco/FastPPM,https://github.com/predictivelabsai/FastPPM,dev/plai/carhero
+sheets,sheets.fastsme.com,191.218.164.166,dev/fastco/FastSheets,https://github.com/predictivelabsai/FastSheets,dev/plai/carhero
+slides,slides.fastsme.com,191.218.164.166,dev/fastco/FastSlides,https://github.com/predictivelabsai/FastSlides,dev/plai/carhero

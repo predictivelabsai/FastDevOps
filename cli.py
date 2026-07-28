@@ -117,6 +117,77 @@ def require_app(api: Coolify, name: str) -> dict:
     return app
 
 
+def provision_body(name: str, service: dict, env: dict) -> dict:
+    build = service["build"]
+    body = {
+        "project_uuid": env["coolify"]["project_uuid"],
+        "environment_uuid": env["coolify"]["environment_uuid"],
+        "server_uuid": env["coolify"]["server_uuid"],
+        "git_repository": f"https://github.com/{service['repo']}",
+        "git_branch": service["branch"],
+        "build_pack": build["type"],
+        "ports_exposes": str(service["port"]),
+        "name": name,
+        "domains": service["domain"],
+        "is_auto_deploy_enabled": True,
+        "is_force_https_enabled": True,
+        "autogenerate_domain": False,
+        "instant_deploy": False,
+    }
+    if build["type"] == "dockerfile":
+        body["dockerfile_location"] = build["dockerfile"]
+    if build.get("start_command"):
+        body["start_command"] = build["start_command"]
+    return body
+
+
+def application_settings(name: str, service: dict) -> dict:
+    settings = {
+        "description": service.get("description", f"{name} FastSME service"),
+        "health_check_enabled": False,
+        "limits_memory": service.get("limits_memory", "768M"),
+        "limits_cpus": service.get("limits_cpus", "1"),
+    }
+    settings["custom_docker_run_options"] = ""
+    return settings
+
+
+def cmd_provision(args):
+    if not args.yes:
+        target = args.service or "the complete fleet"
+        if input(f"Create or reconcile {target} in Coolify? [y/N] ").strip().lower() != "y":
+            print("aborted")
+            return
+    api = client(args.env)
+    env = environment(args.env)
+    existing = {app.get("name"): app for app in api.applications()}
+    for name, service in select(args.service):
+        body = provision_body(name, service, env)
+        app = existing.get(name)
+        if app:
+            if name == "fastfunnel":
+                print(f"{name}: exists {app['uuid']} (unchanged)")
+            else:
+                api.update_application(
+                    app["uuid"], application_settings(name, service)
+                )
+                if service.get("volume") and not any(
+                    row.get("mount_path") == service["volume"]
+                    for row in api.storages(app["uuid"])
+                ):
+                    api.create_storage(app["uuid"], "data", service["volume"])
+                print(f"{name}: reconciled {app['uuid']}")
+        else:
+            result = api.create_public_application(body)
+            uuid = result.get("uuid")
+            if not uuid:
+                raise RuntimeError(f"{name}: Coolify did not return an application UUID")
+            api.update_application(uuid, application_settings(name, service))
+            if service.get("volume"):
+                api.create_storage(uuid, "data", service["volume"])
+            print(f"{name}: created {uuid}")
+
+
 def cmd_status(args):
     api = client(args.env)
     for name, service in select(args.service):
@@ -141,11 +212,12 @@ def cmd_env(args):
                     continue
             local_dir = ROOT.parent / service.get("local_dir", name)
             source = load_local_env(local_dir / ".env")
+            shared = load_local_env(ROOT.parent / "FastFunnel" / ".env")
             env_config = service.get("env", {})
             variables = {
-                key: source[key]
+                key: source.get(key) or shared[key]
                 for key in env_config.get("required", [])
-                if source.get(key)
+                if source.get(key) or shared.get(key)
             }
             missing = [
                 key for key in env_config.get("required", [])
@@ -169,15 +241,16 @@ def cmd_env(args):
 
 def cmd_deploy(args):
     if not args.yes:
-        answer = input(f"Deploy {args.service} from its configured branch? [y/N] ")
+        answer = input(f"Deploy {args.service or 'the complete fleet'}? [y/N] ")
         if answer.strip().lower() != "y":
             print("aborted")
             return
     api = client(args.env)
-    app = require_app(api, args.service)
-    result = api.deploy(app["uuid"])
-    deployment = result.get("deployment_uuid", "queued")
-    print(f"{args.service}: deployment {deployment}")
+    for name, _service in select(args.service):
+        app = require_app(api, name)
+        result = api.deploy(app["uuid"])
+        deployment = result.get("deployment_uuid", "queued")
+        print(f"{name}: deployment {deployment}")
 
 
 def main():
@@ -190,6 +263,10 @@ def main():
     doctor = sub.add_parser("doctor")
     doctor.add_argument("service", nargs="?")
     doctor.set_defaults(func=cmd_doctor)
+    provision = sub.add_parser("provision")
+    provision.add_argument("service", nargs="?")
+    provision.add_argument("--yes", action="store_true")
+    provision.set_defaults(func=cmd_provision)
     status = sub.add_parser("status")
     status.add_argument("service", nargs="?")
     status.set_defaults(func=cmd_status)
@@ -199,7 +276,7 @@ def main():
     env.add_argument("--yes", action="store_true", help="skip mutation confirmation")
     env.set_defaults(func=cmd_env)
     deploy = sub.add_parser("deploy")
-    deploy.add_argument("service")
+    deploy.add_argument("service", nargs="?")
     deploy.add_argument("--yes", action="store_true")
     deploy.set_defaults(func=cmd_deploy)
     args = parser.parse_args()

@@ -11,7 +11,7 @@ The installed skill source is
 
 ## FastFunnel rollout
 
-1. Fix the trusted certificate for `coolify.fastsme.com`.
+1. Verify the trusted certificate for `coolify.fastsme.com`.
 2. Generate `COOLIFY_API_TOKEN`; keep it in a local ignored `.env` and CI
    secret store.
 3. In Coolify, create project `FastSME` and install a GitHub App on
