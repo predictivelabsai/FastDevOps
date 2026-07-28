@@ -17,6 +17,24 @@ from providers.coolify import Coolify
 ROOT = Path(__file__).resolve().parent
 
 
+def load_local_env(path: Path) -> dict[str, str]:
+    values = {}
+    if not path.exists():
+        return values
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        values[key.strip()] = value.strip()
+    return values
+
+
+def load_control_plane_env() -> None:
+    for key, value in load_local_env(ROOT / ".env").items():
+        os.environ.setdefault(key, value)
+
+
 def load_yaml(path: Path) -> dict:
     with path.open(encoding="utf-8") as stream:
         return yaml.safe_load(stream) or {}
@@ -51,7 +69,8 @@ def client(env_name: str) -> Coolify:
     env = environment(env_name)
     if env.get("provider") != "coolify":
         raise RuntimeError(f"environment {env_name!r} is not a Coolify environment")
-    return Coolify(env["coolify"]["base_url"])
+    base_url = os.getenv("COOLIFY_BASE_URL", env["coolify"]["base_url"])
+    return Coolify(base_url)
 
 
 def health(url: str, path: str) -> str:
@@ -112,8 +131,38 @@ def cmd_status(args):
 
 def cmd_env(args):
     api = client(args.env)
-    for name, _service in select(args.service):
+    for name, service in select(args.service):
         app = require_app(api, name)
+        if args.sync:
+            if not args.yes:
+                answer = input(f"Sync declared runtime variables to {name}? [y/N] ")
+                if answer.strip().lower() != "y":
+                    print("aborted")
+                    continue
+            local_dir = ROOT.parent / service.get("local_dir", name)
+            source = load_local_env(local_dir / ".env")
+            env_config = service.get("env", {})
+            variables = {
+                key: source[key]
+                for key in env_config.get("required", [])
+                if source.get(key)
+            }
+            missing = [
+                key for key in env_config.get("required", [])
+                if key not in variables
+            ]
+            if missing:
+                raise RuntimeError(
+                    f"{name}: required variables missing from {local_dir / '.env'}: "
+                    + ", ".join(missing)
+                )
+            variables.update({
+                key: str(value)
+                for key, value in env_config.get("runtime", {}).items()
+            })
+            api.sync_environment(app["uuid"], variables)
+            print(f"{name}: synchronized {len(variables)} variable(s); values hidden")
+            continue
         names = api.environment_names(app["uuid"])
         print(f"{name}: {', '.join(names) if names else '(none)'}")
 
@@ -132,6 +181,7 @@ def cmd_deploy(args):
 
 
 def main():
+    load_control_plane_env()
     parser = argparse.ArgumentParser(description="FastSME Coolify/Pulumi orchestrator")
     parser.add_argument("--env", default="production")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -145,6 +195,8 @@ def main():
     status.set_defaults(func=cmd_status)
     env = sub.add_parser("env", help="list variable names; values are never printed")
     env.add_argument("service", nargs="?")
+    env.add_argument("--sync", action="store_true", help="sync declared values from sibling .env")
+    env.add_argument("--yes", action="store_true", help="skip mutation confirmation")
     env.set_defaults(func=cmd_env)
     deploy = sub.add_parser("deploy")
     deploy.add_argument("service")

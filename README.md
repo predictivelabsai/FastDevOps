@@ -27,9 +27,11 @@ export COOLIFY_API_TOKEN=...
 python cli.py doctor
 python cli.py status fastfunnel
 python cli.py env fastfunnel
+python cli.py env fastfunnel --sync
 ```
 
-The CLI defaults to read-only operations. Deployment and environment writes
+The CLI loads `COOLIFY_API_TOKEN` and an optional `COOLIFY_BASE_URL` from the
+ignored local `.env`. The CLI defaults to read-only operations. Deployment and environment writes
 require an explicit command and confirmation; `--yes` is intended for CI.
 
 ## CI/CD model

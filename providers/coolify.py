@@ -50,5 +50,18 @@ class Coolify:
         rows = self.request("GET", f"/applications/{uuid}/envs") or []
         return sorted(row.get("key", "") for row in rows if row.get("key"))
 
+    def sync_environment(self, uuid: str, variables: dict[str, str]) -> None:
+        data = [
+            {
+                "key": key,
+                "value": str(value),
+                "is_preview": False,
+                "is_literal": True,
+                "is_multiline": False,
+            }
+            for key, value in variables.items()
+        ]
+        self.request("PATCH", f"/applications/{uuid}/envs/bulk", {"data": data})
+
     def deploy(self, uuid: str) -> dict:
         return self.request("POST", f"/applications/{uuid}/restart") or {}
