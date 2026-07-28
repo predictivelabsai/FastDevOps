@@ -149,8 +149,14 @@ activemq-data/
 
 # Environments
 .env
+.env.*
+!.env.sample
 .envrc
 .venv
+.playwright-cli/
+.pulumi/
+Pulumi.*.yaml
+!infra/gcp/Pulumi.yaml
 env/
 venv/
 ENV/

@@ -1,0 +1,32 @@
+defaults:
+  branch: main
+  build:
+    type: dockerfile
+    dockerfile: /Dockerfile
+    context: /
+  coolify:
+    server: localhost
+  cloud_run:
+    cpu: "1"
+    memory: 512Mi
+    min_instances: 0
+    max_instances: 3
+    concurrency: 80
+
+services:
+  fastfunnel:
+    description: FastFunnel autonomous marketing cockpit
+    repo: predictivelabsai/fastfunnel
+    local_dir: FastFunnel
+    port: 5005
+    domain: https://funnel.fastsme.com
+    health:
+      path: /healthz
+    env:
+      required:
+        - XAI_API_KEY
+      runtime:
+        FASTFUNNEL_HOST: 0.0.0.0
+        FASTFUNNEL_PORT: "5005"
+        FASTFUNNEL_BASE_URL: https://funnel.fastsme.com
+        FASTFUNNEL_DEV_AUTH_BYPASS: "0"

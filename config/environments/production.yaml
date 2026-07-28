@@ -1,0 +1,5 @@
+provider: coolify
+coolify:
+  base_url: https://coolify.fastsme.com
+  project: FastSME
+  server: localhost

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coolify CI/CD"
+  short_description: "Deploy and verify Fast services on Coolify"
+  default_prompt: "Use $coolify-cicd to inspect or operate a Fast repository deployment through FastDevOps."

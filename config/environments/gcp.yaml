@@ -1,0 +1,5 @@
+provider: gcp
+gcp:
+  project: fastsme-production
+  region: europe-west1
+  registry: fastsme

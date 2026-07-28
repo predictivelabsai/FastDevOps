@@ -1,0 +1,7 @@
+name: fastsme-infra
+runtime:
+  name: python
+  options:
+    toolchain: pip
+    virtualenv: ../../.venv
+description: Config-driven GCP Cloud Run fallback for FastSME services

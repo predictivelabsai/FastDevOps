@@ -1,0 +1,20 @@
+[project]
+name = "fastdevops"
+version = "0.1.0"
+description = "Coolify and Pulumi deployment orchestrator for Fast* services"
+requires-python = ">=3.12"
+dependencies = ["pyyaml>=6.0"]
+
+[project.optional-dependencies]
+gcp = ["pulumi>=3.0", "pulumi-gcp>=8.0"]
+
+[project.scripts]
+fastdevops = "cli:main"
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["cli"]
+packages = ["providers"]
