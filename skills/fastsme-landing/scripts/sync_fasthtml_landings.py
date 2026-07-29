@@ -8,8 +8,23 @@ from pathlib import Path
 
 import yaml
 
-ROOT = Path(__file__).resolve().parents[3]
-PORTFOLIO = ROOT / "skills/fastsme-landing/references/portfolio.yaml"
+SKILL_ROOT = Path(__file__).resolve().parents[1]
+PORTFOLIO = SKILL_ROOT / "references/portfolio.yaml"
+
+
+def find_control_plane() -> Path:
+    """Find FastDevOps from either the control plane or a sibling Fast* repo."""
+    cwd = Path.cwd().resolve()
+    for parent in (cwd, *cwd.parents):
+        if (parent / "config/services.yaml").is_file() and parent.name == "FastDevOps":
+            return parent
+        sibling = parent / "FastDevOps"
+        if (sibling / "config/services.yaml").is_file():
+            return sibling
+    raise SystemExit("FastDevOps not found; run from FastDevOps or a sibling Fast* repository")
+
+
+ROOT = find_control_plane()
 FASTCO = ROOT.parent
 
 LANDING_TEMPLATE = '''"""Public {name} product landing page."""
