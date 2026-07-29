@@ -42,6 +42,22 @@ Provisioning is idempotent: existing applications are reconciled, missing
 applications and declared persistent volumes are created, and FastFunnel's
 hand-tuned configuration is preserved.
 
+## Deploying from an application repository
+
+Each cataloged repository includes `scripts/coolify.py` and a
+`.env.coolify.sample`. With FastDevOps checked out beside the application:
+
+```bash
+python scripts/coolify.py status
+python scripts/coolify.py env --sync --yes
+python scripts/coolify.py deploy --yes
+```
+
+Set `FASTDEVOPS_DIR` when the control-plane checkout is elsewhere. The launcher
+resolves its service through `config/services.yaml`; it does not duplicate
+domains, ports, volumes, or runtime settings. Keep `COOLIFY_API_TOKEN` and any
+required API keys in the ignored `.env` or a CI secret store.
+
 ## CI/CD model
 
 Preferred:
