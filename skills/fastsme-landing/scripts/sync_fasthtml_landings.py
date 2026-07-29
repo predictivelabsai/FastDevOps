@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import shutil
 from pathlib import Path
 
 import yaml
@@ -50,6 +51,8 @@ CSS = """
 .lp-hero{{max-width:1180px;margin:auto;padding:104px 24px 76px}} .lp-kicker{{color:var(--accent);font-size:12px;font-weight:750;text-transform:uppercase;letter-spacing:.16em}}
 .lp-hero h1{{font-size:clamp(42px,7vw,78px);line-height:1.02;letter-spacing:-.055em;max-width:920px;margin:22px 0}} .lp-lede{{font-size:20px;line-height:1.65;color:var(--muted);max-width:720px}}
 .lp-actions{{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}} .lp-secondary{{color:var(--ink);font-weight:650;text-decoration:none;padding:10px 4px}}
+.lp-demo{{max-width:960px;margin:0 auto 76px;padding:0 24px}} .lp-demo-frame{{padding:10px;background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:0 24px 70px rgba(17,24,39,.10)}}
+.lp-demo img{{display:block;width:100%;height:auto;border-radius:14px;background:var(--tint)}} .lp-demo p{{margin:13px 0 2px;text-align:center;color:var(--muted);font-size:13px}}
 .lp-band{{background:var(--tint);border-block:1px solid color-mix(in srgb,var(--accent) 15%,white)}} .lp-grid{{max-width:1180px;margin:auto;padding:64px 24px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}}
 .lp-card{{background:rgba(255,255,255,.82);border:1px solid color-mix(in srgb,var(--accent) 15%,white);border-radius:20px;padding:26px}} .lp-num{{color:var(--accent);font-size:12px;font-weight:750}} .lp-card h2{{font-size:20px;margin:24px 0 8px}} .lp-card p{{color:var(--muted);line-height:1.6;margin:0}}
 .lp-footer{{max-width:1180px;margin:auto;padding:30px 24px 48px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:20px}}
@@ -75,6 +78,10 @@ def landing_page():
                         Div(Button("Sign In or Register", type="button", onclick="authOpen('login')", cls="lp-primary"),
                             A("Explore the open-source suite →", href="https://fastsme.com/products", cls="lp-secondary"),
                             cls="lp-actions"), cls="lp-hero"),
+                Section(Div(Img(src="/static/product-demo.gif", alt="{name} product tour",
+                                loading="eager", width="1854", height="909"),
+                            P("Product tour · see the workspace in action"),
+                            cls="lp-demo-frame"), cls="lp-demo", aria_label="{name} product tour"),
                 Section(Div(*[Article(Span(f"0{{i}}", cls="lp-num"), H2(title),
                                       P("Everything you need for " + title.lower() + ", in one focused workspace."),
                                       cls="lp-card") for i, title in enumerate(features, 1)],
@@ -174,14 +181,24 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
         "FastLMS": "components/landing.py",
         "FastPPM": "web/landing.py",
     }
+    demo_source = repo / meta["demo_gif"]
+    demo_target = repo / "static/product-demo.gif"
+    asset_changes = []
+    if not demo_source.is_file():
+        raise SystemExit(f"{name}: missing demo GIF: {demo_source.relative_to(repo)}")
+    if not demo_target.is_file() or demo_target.read_bytes() != demo_source.read_bytes():
+        asset_changes.append(str(demo_target.relative_to(repo)))
+        if not check:
+            demo_target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(demo_source, demo_target)
     if meta.get("cohort") == "streamlit":
-        return []
+        return asset_changes
     if meta.get("cohort") == "custom":
         path = repo / custom_paths[name]
         expected = LANDING_TEMPLATE.format(name=name, **meta)
         oauth_path = path.with_name("google_auth.py")
         account_path = path.with_name("account_auth.py")
-        changed = []
+        changed = asset_changes
         if not path.exists() or path.read_text() != expected:
             if not check:
                 path.write_text(expected)
@@ -222,7 +239,7 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
     landing_path = repo / "web/landing.py"
     oauth_path = repo / "web/google_auth.py"
     account_path = repo / "web/account_auth.py"
-    changes = []
+    changes = asset_changes
     expected_landing = LANDING_TEMPLATE.format(name=name, **meta)
     expected_account = (SKILL_ROOT / "templates/account_auth.py").read_text()
     for path, expected in ((landing_path, expected_landing), (oauth_path, OAUTH_MODULE),

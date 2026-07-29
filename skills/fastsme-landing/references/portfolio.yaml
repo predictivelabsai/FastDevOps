@@ -1,5 +1,6 @@
 apps:
   FastFunnel:
+    demo_gif: docs/demo/fastfunnel-walkthrough.gif
     cohort: custom
     slug: funnel
     accent: "#f97316"
@@ -9,6 +10,7 @@ apps:
     description: Plan, create, review, schedule, distribute, and measure marketing work through a bounded autonomous agency.
     features: [Campaign planning, Content review and scheduling, Integrations and performance analytics]
   FastClinic:
+    demo_gif: docs/demo/fastclinic-walkthrough.gif
     slug: clinic
     accent: "#1e6fb8"
     tint: "#eef7ff"
@@ -17,6 +19,7 @@ apps:
     description: Run appointments, patient operations, billing, recall, revenue, and multi-specialty workflows from one clinical cockpit.
     features: [Appointments and availability, Patient and treatment operations, Billing and balanced ledgers]
   FastCMS:
+    demo_gif: static/screenshots/admin-tour.gif
     cohort: custom
     slug: cms
     accent: "#7c3aed"
@@ -26,6 +29,7 @@ apps:
     description: Build page trees from reusable blocks, manage media and revisions, collect forms, and serve content through a clean API.
     features: [Structured pages and blocks, Media and revisions, Forms and headless API]
   FastCRM:
+    demo_gif: docs/demo/fastcrm-walkthrough.gif
     slug: crm
     accent: "#4f46e5"
     tint: "#f2f1ff"
@@ -34,6 +38,7 @@ apps:
     description: Bring leads, contacts, activities, tasks, and a visual deal pipeline into one focused sales workspace.
     features: [Visual deal pipeline, Unified customer timeline, Grounded sales copilot]
   FastDocs:
+    demo_gif: docs/demo/fastdocs-walkthrough.gif
     slug: docs
     accent: "#2563eb"
     tint: "#eff6ff"
@@ -42,6 +47,7 @@ apps:
     description: Create block-based documents with reusable templates, version history, publishing, and AI-assisted drafting.
     features: [Block editor and templates, Versions and snapshots, Controlled public sharing]
   FastDrive:
+    demo_gif: docs/demo/fastdrive-walkthrough.gif
     slug: drive
     accent: "#0f766e"
     tint: "#ecfdf9"
@@ -50,6 +56,7 @@ apps:
     description: Store, find, share, and govern files and folders with clear permissions and activity history.
     features: [Files and folders, Role-based sharing, Recent, starred, and recovery views]
   FastERP:
+    demo_gif: docs/demo/fasterp-walkthrough.gif
     slug: erp
     accent: "#2563eb"
     tint: "#eff6ff"
@@ -58,6 +65,7 @@ apps:
     description: Connect sales, purchasing, inventory, invoicing, payments, projects, expenses, and the general ledger.
     features: [Order to cash, Purchasing and inventory, Accounting and reporting]
   FastESM:
+    demo_gif: docs/demo/fastesm-demo.gif
     slug: esm
     accent: "#7c3aed"
     tint: "#f5f3ff"
@@ -66,6 +74,7 @@ apps:
     description: Publish a service catalogue, route approvals, manage requests, and give every role a clear queue.
     features: [Service catalogue, Requests and approvals, Knowledge and workflow design]
   FastFund:
+    demo_gif: docs/fastfund-family-office.gif
     cohort: custom
     slug: fund
     accent: "#0f766e"
@@ -75,6 +84,7 @@ apps:
     description: Connect entities, obligations, documents, service coverage, recommendations, and multijurisdiction tax workflows.
     features: [Entity and obligation graph, Document intelligence, Coverage and relationship recommendations]
   FastHelpdesk:
+    demo_gif: docs/demo/fasthelpdesk-walkthrough.gif
     slug: helpdesk
     accent: "#ea580c"
     tint: "#fff7ed"
@@ -83,6 +93,7 @@ apps:
     description: Give support teams a shared queue, customer context, knowledge, escalation rules, and AI-assisted responses.
     features: [Ticket queues and ownership, Knowledge and canned replies, SLA and escalation workflows]
   FastHRM:
+    demo_gif: docs/demo/fasthr-walkthrough.gif
     slug: hrm
     accent: "#0891b2"
     tint: "#ecfeff"
@@ -91,6 +102,7 @@ apps:
     description: Manage employee records, departments, leave, attendance, payroll, and payslips without enterprise-suite overhead.
     features: [Employee records, Leave and attendance, Payroll and payslips]
   FastInsights:
+    demo_gif: docs/demo/fastinsights-walkthrough.gif
     slug: insights
     accent: "#7c3aed"
     tint: "#f5f3ff"
@@ -99,6 +111,7 @@ apps:
     description: Explore governed data with SQL, reusable queries, dashboards, Plotly visualisations, and guarded text-to-SQL.
     features: [Interactive dashboards, Saved SQL and data sources, Guarded AI analysis]
   FastInsure:
+    demo_gif: docs/demo/fastinsure-walkthrough.gif
     cohort: streamlit
     slug: insure
     accent: "#2563eb"
@@ -108,6 +121,7 @@ apps:
     description: Compare claims and invoices with policy contracts, detect suspicious documents and images, and produce structured risk assessments.
     features: [Claim and policy comparison, Document and image fraud signals, Risk scoring and reporting]
   FastLMS:
+    demo_gif: docs/fastlms-demo.gif
     cohort: custom
     slug: lms
     accent: "#7c3aed"
@@ -117,6 +131,7 @@ apps:
     description: Deliver courses, lessons, quizzes, AI tutoring, school operations, and real-time engagement from one open platform.
     features: [Courses and assessments, AI tutoring, Progress and school operations]
   FastMail:
+    demo_gif: docs/demo/fastmail-walkthrough.gif
     slug: mail
     accent: "#2563eb"
     tint: "#eff6ff"
@@ -125,6 +140,7 @@ apps:
     description: Read threaded email, compose and organise messages, manage contacts and calendars, and draft faster with AI.
     features: [Threaded inbox and labels, Contacts and calendar, AI summaries and drafting]
   FastMeet:
+    demo_gif: docs/demo/fastmeet-walkthrough.gif
     slug: meet
     accent: "#7c3aed"
     tint: "#f5f3ff"
@@ -133,6 +149,7 @@ apps:
     description: Coordinate rooms and participants, build agendas, capture attendance, and turn conversations into useful summaries.
     features: [Scheduling and rooms, Participants and RSVP, AI agendas and summaries]
   FastPPM:
+    demo_gif: docs/media/fastppm-tour.gif
     cohort: custom
     slug: ppm
     accent: "#7c3aed"
@@ -142,6 +159,7 @@ apps:
     description: Connect initiatives, value plans, timelines, documents, reports, prompts, and portfolio decisions in one workspace.
     features: [Initiatives and value plans, Gantt and portfolio views, Documents and generated reports]
   FastSheets:
+    demo_gif: docs/demo/fastsheets-walkthrough.gif
     slug: sheets
     accent: "#15803d"
     tint: "#f0fdf4"
@@ -150,6 +168,7 @@ apps:
     description: Build computed workbooks with a safe formula engine, structured formatting, and AI-assisted analysis.
     features: [Safe formulas, Workbook formatting, Grounded spreadsheet copilot]
   FastSlides:
+    demo_gif: docs/demo/fastslides-walkthrough.gif
     slug: slides
     accent: "#d97706"
     tint: "#fffbeb"
