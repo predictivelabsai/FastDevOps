@@ -23,12 +23,16 @@ only in the shell:
 
 ```bash
 export COOLIFY_API_TOKEN=...
-python cli.py doctor
-python cli.py status fastfunnel
-python cli.py env fastfunnel
-python cli.py env fastfunnel --sync
+```
+
+Run the complete fleet workflow from this repository:
+
+```bash
+python cli.py validate
 python cli.py provision --yes
+python cli.py env --sync --yes
 python cli.py deploy --yes
+python cli.py status
 ```
 
 The CLI loads `COOLIFY_API_TOKEN` and an optional `COOLIFY_BASE_URL` from the
@@ -43,13 +47,20 @@ hand-tuned configuration is preserved.
 Preferred:
 
 ```text
-push main → Coolify GitHub App webhook → Dockerfile build → health check → route
+push configured branch → GitHub repository webhook → Coolify build → health check → route
 ```
 
 The FastDevOps CLI is the control plane for inventory, status, manual deploys,
-and environment synchronization. GitHub Actions can call it with
-`COOLIFY_API_TOKEN` when a GitHub App cannot be installed, but using both
-automatic mechanisms for one service should be avoided.
+and environment synchronization. Each public source repository has one active,
+push-only webhook targeting:
+
+```text
+https://coolify.fastsme.com/webhooks/source/github/events/manual
+```
+
+Coolify matches the repository and configured branch to the application. A
+GitHub App or GitHub Action is an alternative, but using more than one
+automatic deployment mechanism for the same service should be avoided.
 
 ## GCP preview
 
