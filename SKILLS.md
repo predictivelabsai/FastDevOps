@@ -19,6 +19,14 @@ The fleet-wide source, product palettes, callback contract, and idempotent sync
 tool live in [`skills/fastsme-landing/`](skills/fastsme-landing/). Streamlit
 products are explicitly deferred until they are migrated.
 
+The same landing workflow owns each product's public `/developers` surface.
+After API or landing changes, validate the committed OpenAPI snapshots and
+navigation contract with:
+
+```bash
+python scripts/validate_fastapi_fleet.py
+```
+
 ## FastFunnel rollout
 
 1. Verify the trusted certificate for `coolify.fastsme.com`.

@@ -106,3 +106,25 @@ See [SKILLS.md](SKILLS.md) for the rollout runbook.
 The cross-repository analysis and proposed `fastsme-core` package boundaries
 are documented in
 [docs/fastsme-core-analysis.md](docs/fastsme-core-analysis.md).
+
+## Product APIs
+
+The 18 migrated products expose public FastAPI read surfaces backed by their
+current demo databases, selected token-gated writes, committed OpenAPI
+snapshots, and branded developer documentation:
+
+```text
+https://<product>.fastsme.com/developers
+https://<product>.fastsme.com/api/docs
+https://<product>.fastsme.com/api/openapi.json
+https://<product>.fastsme.com/swagger.json
+```
+
+Validate the fleet contract without changing deployments:
+
+```bash
+python scripts/validate_fastapi_fleet.py
+```
+
+See [docs/fastsme-api-contract.md](docs/fastsme-api-contract.md) for the access
+model, compatibility rules, and release gates.
