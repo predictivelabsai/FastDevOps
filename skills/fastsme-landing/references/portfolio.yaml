@@ -20,6 +20,7 @@ apps:
     features: [Appointments and availability, Patient and treatment operations, Billing and balanced ledgers]
   FastCMS:
     demo_gif: static/screenshots/admin-tour.gif
+    demo_url: /product-demo.gif
     cohort: custom
     slug: cms
     accent: "#7c3aed"
