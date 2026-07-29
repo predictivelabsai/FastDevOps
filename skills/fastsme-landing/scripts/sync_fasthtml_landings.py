@@ -30,6 +30,8 @@ FASTCO = ROOT.parent
 LANDING_TEMPLATE = '''"""Public {name} product landing page."""
 from fasthtml.common import *
 
+from .account_auth import AUTH_CSS, AUTH_JS, auth_modal
+
 ACCENT = "{accent}"
 TINT = "{tint}"
 
@@ -38,7 +40,7 @@ CSS = """
 *{{box-sizing:border-box}} body{{margin:0;background:#fff;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}}
 .lp-nav{{height:68px;display:flex;align-items:center;justify-content:space-between;max-width:1180px;margin:auto;padding:0 24px;border-bottom:1px solid var(--line)}}
 .lp-brand{{display:flex;align-items:center;gap:10px;font-weight:750;color:var(--ink);text-decoration:none}} .lp-mark{{width:30px;height:30px;border-radius:10px;background:var(--accent);display:grid;place-items:center;color:white}}
-.lp-signin,.lp-primary{{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:10px 17px;text-decoration:none;font-weight:650;font-size:14px}} .lp-signin{{border:1px solid var(--line);color:var(--ink);background:white}} .lp-primary{{background:var(--accent);color:white}}
+.lp-signin,.lp-primary{{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:10px 17px;text-decoration:none;font-weight:650;font-size:14px;cursor:pointer}} .lp-signin{{border:1px solid var(--line);color:var(--ink);background:white}} .lp-primary{{background:var(--accent);color:white;border:0}}
 .lp-hero{{max-width:1180px;margin:auto;padding:104px 24px 76px}} .lp-kicker{{color:var(--accent);font-size:12px;font-weight:750;text-transform:uppercase;letter-spacing:.16em}}
 .lp-hero h1{{font-size:clamp(42px,7vw,78px);line-height:1.02;letter-spacing:-.055em;max-width:920px;margin:22px 0}} .lp-lede{{font-size:20px;line-height:1.65;color:var(--muted);max-width:720px}}
 .lp-actions{{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}} .lp-secondary{{color:var(--ink);font-weight:650;text-decoration:none;padding:10px 4px}}
@@ -56,24 +58,26 @@ def landing_page():
              Meta(name="description", content="{description}"),
              Link(rel="preconnect", href="https://fonts.googleapis.com"),
              Link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;750&display=swap"),
-             Style(CSS)),
+             Style(CSS + AUTH_CSS)),
         Body(
             Nav(A(Span("F", cls="lp-mark"), Span("{name}"), href="/", cls="lp-brand"),
-                A("Sign In", href="/auth/google", cls="lp-signin"), cls="lp-nav"),
+                Button("Sign In", type="button", onclick="authOpen('login')", cls="lp-signin"), cls="lp-nav"),
             Main(
                 Section(Span("{eyebrow}", cls="lp-kicker"), H1("{headline}"),
                         P("{description}", cls="lp-lede"),
-                        Div(A("Sign in with Google", href="/auth/google", cls="lp-primary"),
+                        Div(Button("Sign In or Register", type="button", onclick="authOpen('login')", cls="lp-primary"),
                             A("Explore the open-source suite →", href="https://fastsme.com/products", cls="lp-secondary"),
                             cls="lp-actions"), cls="lp-hero"),
                 Section(Div(*[Article(Span(f"0{{i}}", cls="lp-num"), H2(title),
-                                      P(("Everything you need for " + title.lower() + ", in one focused workspace.")),
+                                      P("Everything you need for " + title.lower() + ", in one focused workspace."),
                                       cls="lp-card") for i, title in enumerate(features, 1)],
                             cls="lp-grid"), cls="lp-band"),
             ),
             Footer(Span("{name} is part of the open-source FastSME suite."),
                    A("View all products", href="https://fastsme.com/products", style="color:var(--accent)"),
                    cls="lp-footer"),
+            auth_modal("{name}"),
+            Script(AUTH_JS),
         ),
     )
 '''
@@ -169,6 +173,7 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
         path = repo / custom_paths[name]
         expected = LANDING_TEMPLATE.format(name=name, **meta)
         oauth_path = path.with_name("google_auth.py")
+        account_path = path.with_name("account_auth.py")
         changed = []
         if not path.exists() or path.read_text() != expected:
             if not check:
@@ -179,13 +184,42 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
             if not check:
                 oauth_path.write_text(OAUTH_MODULE)
             changed.append(str(oauth_path.relative_to(repo)))
+        expected_account = (SKILL_ROOT / "templates/account_auth.py").read_text()
+        if not account_path.exists() or account_path.read_text() != expected_account:
+            if not check:
+                account_path.write_text(expected_account)
+            changed.append(str(account_path.relative_to(repo)))
+        sample = repo / ".env.sample"
+        if not sample.exists():
+            sample = repo / ".env.example"
+        if sample.exists() and "FASTSME_AUTH_DB=" not in sample.read_text():
+            addition = (
+                "\n# FastSME local accounts and transactional email\n"
+                "FASTSME_AUTH_DB=\n"
+                f"FASTSME_PUBLIC_URL=https://{meta['slug']}.fastsme.com\n"
+                "POSTMARK_API_TOKEN=\n"
+                "FROM_EMAIL=info@predictivelabs.ai\n"
+            )
+            if not check:
+                sample.write_text(sample.read_text().rstrip() + "\n" + addition)
+            changed.append(sample.name)
+        elif sample.exists() and "FROM_EMAIL=info@predictivelabs.co.uk" in sample.read_text():
+            if not check:
+                sample.write_text(sample.read_text().replace(
+                    "FROM_EMAIL=info@predictivelabs.co.uk",
+                    "FROM_EMAIL=info@predictivelabs.ai",
+                ))
+            changed.append(sample.name)
         return changed
     app_path = repo / "web_app.py"
     landing_path = repo / "web/landing.py"
     oauth_path = repo / "web/google_auth.py"
+    account_path = repo / "web/account_auth.py"
     changes = []
     expected_landing = LANDING_TEMPLATE.format(name=name, **meta)
-    for path, expected in ((landing_path, expected_landing), (oauth_path, OAUTH_MODULE)):
+    expected_account = (SKILL_ROOT / "templates/account_auth.py").read_text()
+    for path, expected in ((landing_path, expected_landing), (oauth_path, OAUTH_MODULE),
+                           (account_path, expected_account)):
         if not path.exists() or path.read_text() != expected:
             changes.append(str(path.relative_to(repo)))
             if not check:
@@ -198,11 +232,42 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
             marker = "from web.layout import page, right_pane_reference, LAYOUT_CSS"
         else:
             marker = IMPORT_MARKER if IMPORT_MARKER in updated else "from web import views"
-        updated = updated.replace(marker, marker + "\nfrom web.landing import landing_page\nfrom web import google_auth", 1)
+        updated = updated.replace(marker, marker + "\nfrom web.landing import landing_page\nfrom web import account_auth, google_auth", 1)
+    elif "from web import google_auth" in updated and "account_auth" not in updated:
+        updated = updated.replace("from web import google_auth", "from web import account_auth, google_auth", 1)
+    if "account_auth.register_fasthtml_routes(" not in updated:
+        session_key = "user_email" if name == "FastClinic" else "user"
+        success = "/role-select" if name == "FastESM" else "/"
+        marker = "def _auth" if name == "FastClinic" else "def _user"
+        registration = (
+            f'account_auth.register_fasthtml_routes(rt, app_name="{name}", '
+            f'session_key="{session_key}", success_path="{success}")\n\n\n'
+        )
+        updated = updated.replace(marker, registration + marker, 1)
+    updated = updated.replace(
+        '")\\n\\n\\n# --- auth helpers',
+        '")\n\n\n# --- auth helpers',
+    )
     if '@rt("/auth/google")' not in updated:
         success = "/role-select" if name == "FastESM" else "/"
         block = ROUTES.format(success=success)
         updated = updated.replace("\n@rt(\"/logout\")", block + "\n\n@rt(\"/logout\")", 1)
+    if "account_auth.accounts.link_google" not in updated:
+        session_assignment = (
+            '    session["user_email"] = identity["email"]'
+            if name == "FastClinic" else
+            '    session["user"] = identity["email"]'
+        )
+        updated = updated.replace(
+            session_assignment,
+            '    account_auth.accounts.link_google(identity["email"], identity["name"])\n'
+            + session_assignment,
+            1,
+        )
+    updated = updated.replace(
+        'identity["name"])\\n    session["user"]',
+        'identity["name"])\n    session["user"]',
+    )
     root_marker = '@rt("/")\ndef get(session'
     start = updated.find(root_marker)
     if start >= 0:
@@ -236,10 +301,30 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
                 "\n# Google SSO\nGOOGLE_CLIENT_ID=\nGOOGLE_CLIENT_SECRET=\n"
                 f"GOOGLE_REDIRECT_URI=https://{meta['slug']}.fastsme.com/auth/google/callback\n"
                 "GOOGLE_ALLOWED_DOMAINS=\nGOOGLE_ALLOWED_EMAILS=\n"
+                "FASTSME_AUTH_DB=\nFASTSME_PUBLIC_URL=\nPOSTMARK_API_TOKEN=\nFROM_EMAIL=\n"
             )
             changes.append(sample.name)
             if not check:
                 sample.write_text(text.rstrip() + "\n" + addition)
+                text = sample.read_text()
+        if "FASTSME_AUTH_DB=" not in text:
+            addition = (
+                "\n# FastSME local accounts and transactional email\n"
+                "FASTSME_AUTH_DB=\n"
+                f"FASTSME_PUBLIC_URL=https://{meta['slug']}.fastsme.com\n"
+                "POSTMARK_API_TOKEN=\n"
+                "FROM_EMAIL=info@predictivelabs.ai\n"
+            )
+            changes.append(sample.name)
+            if not check:
+                sample.write_text(text.rstrip() + "\n" + addition)
+        elif "FROM_EMAIL=info@predictivelabs.co.uk" in text:
+            changes.append(sample.name)
+            if not check:
+                sample.write_text(text.replace(
+                    "FROM_EMAIL=info@predictivelabs.co.uk",
+                    "FROM_EMAIL=info@predictivelabs.ai",
+                ))
     return changes
 
 

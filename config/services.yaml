@@ -27,12 +27,16 @@ services:
         - XAI_API_KEY
         - GOOGLE_CLIENT_ID
         - GOOGLE_CLIENT_SECRET
+        - POSTMARK_API_TOKEN
       runtime:
         FASTFUNNEL_HOST: 0.0.0.0
         FASTFUNNEL_PORT: "5005"
         FASTFUNNEL_BASE_URL: https://funnel.fastsme.com
         FASTFUNNEL_DEV_AUTH_BYPASS: "0"
         GOOGLE_REDIRECT_URI: https://funnel.fastsme.com/auth/google/callback
+        FASTSME_AUTH_DB: /app/data/fastsme-accounts.sqlite
+        FASTSME_PUBLIC_URL: https://funnel.fastsme.com
+        FROM_EMAIL: info@predictivelabs.ai
   fastclinic:
     repo: predictivelabsai/FastClinic
     local_dir: FastClinic
@@ -41,8 +45,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTCLINIC_PORT: "5005", FASTCLINIC_DB: /data/fastclinic.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://clinic.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTCLINIC_PORT: "5005", FASTCLINIC_DB: /data/fastclinic.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://clinic.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://clinic.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastcms:
     repo: predictivelabsai/FastCMS
     local_dir: FastCMS
@@ -52,11 +56,14 @@ services:
     build: {type: nixpacks, start_command: python main.py}
     volume: /app/data
     env:
-      required: [GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
+      required: [GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
       runtime:
         PORT: "5001"
         GOOGLE_REDIRECT_URI: https://cms.fastsme.com/auth/google/callback
         GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
+        FASTSME_AUTH_DB: /app/data/fastsme-accounts.sqlite
+        FASTSME_PUBLIC_URL: https://cms.fastsme.com
+        FROM_EMAIL: info@predictivelabs.ai
   fastcrm:
     repo: predictivelabsai/FastCRM
     local_dir: FastCRM
@@ -65,8 +72,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTCRM_PORT: "5006", FASTCRM_DB: /data/fastcrm.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://crm.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTCRM_PORT: "5006", FASTCRM_DB: /data/fastcrm.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://crm.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://crm.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastdocs:
     repo: predictivelabsai/FastDocs
     local_dir: FastDocs
@@ -75,8 +82,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTDOCS_PORT: "5016", FASTDOCS_DB: /data/fastdocs.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://docs.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTDOCS_PORT: "5016", FASTDOCS_DB: /data/fastdocs.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://docs.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://docs.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastdrive:
     repo: predictivelabsai/FastDrive
     local_dir: FastDrive
@@ -85,8 +92,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTDRIVE_PORT: "5012", FASTDRIVE_DB: /data/fastdrive.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://drive.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTDRIVE_PORT: "5012", FASTDRIVE_DB: /data/fastdrive.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://drive.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://drive.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fasterp:
     repo: predictivelabsai/FastERP
     local_dir: FastERP
@@ -95,8 +102,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTERP_PORT: "5011", FASTERP_DB: /data/fasterp.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://erp.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTERP_PORT: "5011", FASTERP_DB: /data/fasterp.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://erp.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://erp.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastesm:
     repo: predictivelabsai/FastESM
     local_dir: FastESM
@@ -106,8 +113,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTESM_PORT: "5015", FASTESM_DB: /data/fastesm.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://esm.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTESM_PORT: "5015", FASTESM_DB: /data/fastesm.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://esm.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://esm.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastfund:
     repo: predictivelabsai/FastFund
     local_dir: FastFund
@@ -116,8 +123,8 @@ services:
     health: {path: /health}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {DATA_STORAGE: sqlite, DB_URL: "sqlite:////data/fastfund.sqlite", DOC_LOCAL_DIR: /data/docs, LLM_PROVIDER: xai, FASTFUND_AUTOSEED: "1", GOOGLE_REDIRECT_URI: https://fund.fastsme.com/auth/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {DATA_STORAGE: sqlite, DB_URL: "sqlite:////data/fastfund.sqlite", DOC_LOCAL_DIR: /data/docs, LLM_PROVIDER: xai, FASTFUND_AUTOSEED: "1", GOOGLE_REDIRECT_URI: https://fund.fastsme.com/auth/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://fund.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fasthelpdesk:
     repo: predictivelabsai/FastHelpdesk
     local_dir: FastHelpdesk
@@ -126,8 +133,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTHELPDESK_PORT: "5007", FASTHELPDESK_DB: /data/fasthelpdesk.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://helpdesk.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTHELPDESK_PORT: "5007", FASTHELPDESK_DB: /data/fasthelpdesk.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://helpdesk.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://helpdesk.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fasthrm:
     repo: predictivelabsai/FastHRM
     local_dir: FastHRM
@@ -136,8 +143,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTHR_PORT: "5010", FASTHR_DB: /data/fasthr.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://hrm.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTHR_PORT: "5010", FASTHR_DB: /data/fasthr.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://hrm.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://hrm.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastinsights:
     repo: predictivelabsai/FastInsights
     local_dir: FastInsights
@@ -146,8 +153,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTINSIGHTS_PORT: "5008", FASTINSIGHTS_DB: /data/fastinsights.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://insights.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTINSIGHTS_PORT: "5008", FASTINSIGHTS_DB: /data/fastinsights.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://insights.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://insights.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastinsure:
     repo: kaljuvee/insurance-demo
     local_dir: FastInsure
@@ -166,8 +173,8 @@ services:
     volume: /data
     database: fastlms-postgres
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://lms.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://lms.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://lms.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastmail:
     repo: predictivelabsai/FastMail
     local_dir: FastMail
@@ -176,8 +183,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTMAIL_PORT: "5009", FASTMAIL_DB: /data/fastmail.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://mail.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTMAIL_PORT: "5009", FASTMAIL_DB: /data/fastmail.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://mail.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://mail.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastmeet:
     repo: predictivelabsai/FastMeet
     local_dir: FastMeet
@@ -186,8 +193,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTMEET_PORT: "5015", FASTMEET_DB: /data/fastmeet.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://meet.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTMEET_PORT: "5015", FASTMEET_DB: /data/fastmeet.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://meet.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://meet.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastppm:
     repo: predictivelabsai/FastPPM
     local_dir: FastPPM
@@ -196,8 +203,8 @@ services:
     health: {path: /health}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {DATA_STORAGE: sqlite, DB_URL: "sqlite:////data/fastppm.sqlite", UPLOAD_DIR: /data/uploads, LLM_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://ppm.fastsme.com/auth/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {DATA_STORAGE: sqlite, DB_URL: "sqlite:////data/fastppm.sqlite", UPLOAD_DIR: /data/uploads, LLM_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://ppm.fastsme.com/auth/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://ppm.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastsheets:
     repo: predictivelabsai/FastSheets
     local_dir: FastSheets
@@ -206,8 +213,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTSHEETS_PORT: "5014", FASTSHEETS_DB: /data/fastsheets.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://sheets.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTSHEETS_PORT: "5014", FASTSHEETS_DB: /data/fastsheets.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://sheets.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://sheets.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastslides:
     repo: predictivelabsai/FastSlides
     local_dir: FastSlides
@@ -216,5 +223,5 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
-      runtime: {FASTSLIDES_PORT: "5013", FASTSLIDES_DB: /data/fastslides.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://slides.fastsme.com/auth/google/callback}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {FASTSLIDES_PORT: "5013", FASTSLIDES_DB: /data/fastslides.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://slides.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://slides.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
