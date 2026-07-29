@@ -51,7 +51,12 @@ services:
     health: {path: /}
     build: {type: nixpacks, start_command: python main.py}
     volume: /app/data
-    env: {required: [GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET], runtime: {PORT: "5001", GOOGLE_REDIRECT_URI: https://cms.fastsme.com/auth/google/callback}}
+    env:
+      required: [GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
+      runtime:
+        PORT: "5001"
+        GOOGLE_REDIRECT_URI: https://cms.fastsme.com/auth/google/callback
+        GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
   fastcrm:
     repo: predictivelabsai/FastCRM
     local_dir: FastCRM
