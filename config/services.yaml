@@ -14,6 +14,32 @@ defaults:
     concurrency: 80
 
 services:
+  fastoffice:
+    description: FastOffice open-source productivity suite and AI workspace
+    repo: predictivelabsai/FastOffice
+    local_dir: FastOffice
+    port: 5020
+    domain: https://office.fastsme.com
+    health: {path: /health}
+    volume: /data
+    env:
+      required:
+        - XAI_API_KEY
+        - GOOGLE_CLIENT_ID
+        - GOOGLE_CLIENT_SECRET
+        - POSTMARK_API_TOKEN
+        - FASTOFFICE_SESSION_SECRET
+        - FASTOFFICE_ENCRYPTION_KEY
+      runtime:
+        FASTOFFICE_ENV: production
+        FASTOFFICE_PORT: "5020"
+        FASTOFFICE_DB: /data/fastoffice.sqlite
+        FASTOFFICE_PUBLIC_URL: https://office.fastsme.com
+        FASTOFFICE_BOOTSTRAP_ADMIN: kaljuvee@gmail.com
+        FASTOFFICE_DEV_LOGIN: "false"
+        MODEL_PROVIDER: xai
+        GOOGLE_REDIRECT_URI: https://office.fastsme.com/auth/google/callback
+        FROM_EMAIL: info@fastsme.com
   fastfunnel:
     description: FastFunnel autonomous marketing cockpit
     repo: predictivelabsai/fastfunnel
