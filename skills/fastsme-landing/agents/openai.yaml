@@ -1,0 +1,4 @@
+interface:
+  display_name: "FastSME Landing Pages"
+  short_description: "Build consistent branded FastSME product landing pages"
+  default_prompt: "Update a FastSME product landing page using the fleet design and Google SSO contract."
