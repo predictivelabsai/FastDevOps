@@ -100,3 +100,9 @@ python cli.py doctor <service>
 ```
 
 See [SKILLS.md](SKILLS.md) for the rollout runbook.
+
+## Shared-core architecture
+
+The cross-repository analysis and proposed `fastsme-core` package boundaries
+are documented in
+[docs/fastsme-core-analysis.md](docs/fastsme-core-analysis.md).
