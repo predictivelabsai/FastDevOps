@@ -9,6 +9,16 @@ Invoke the repository skill as:
 The installed skill source is
 [`skills/coolify-cicd/SKILL.md`](skills/coolify-cicd/SKILL.md).
 
+Create or refresh a product landing page and its Google SSO entry point with:
+
+```text
+/skill fastsme-landing FastCRM
+```
+
+The fleet-wide source, product palettes, callback contract, and idempotent sync
+tool live in [`skills/fastsme-landing/`](skills/fastsme-landing/). Streamlit
+products are explicitly deferred until they are migrated.
+
 ## FastFunnel rollout
 
 1. Verify the trusted certificate for `coolify.fastsme.com`.
