@@ -14,6 +14,23 @@ defaults:
     concurrency: 80
 
 services:
+  fastwiki:
+    description: FastWiki open knowledge workspace
+    repo: predictivelabsai/FastWiki
+    local_dir: FastWiki
+    port: 5022
+    domain: https://wiki.fastsme.com
+    health: {path: /health}
+    volume: /data
+    env:
+      required: [FASTWIKI_SECRET, FASTOFFICE_SSO_SECRET]
+      runtime:
+        FASTWIKI_ENV: production
+        FASTWIKI_PORT: "5022"
+        FASTWIKI_DB: /data/fastwiki.sqlite
+        FASTWIKI_UPLOAD_DIR: /data/uploads
+        FASTWIKI_ATTACHMENT_BACKEND: local
+        FASTOFFICE_URL: https://office.fastsme.com
   fastcal:
     description: FastCal open calendar and public scheduling
     repo: predictivelabsai/FastCal

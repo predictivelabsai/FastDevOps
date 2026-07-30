@@ -281,6 +281,10 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
         "FastLMS": "components/landing.py",
         "FastPPM": "web/landing.py",
     }
+    # Some products provide intentionally bespoke landing pages. They still
+    # belong in the portfolio catalogue, but are not template-sync targets.
+    if meta.get("cohort") == "custom" and name not in custom_paths:
+        return []
     demo_source = repo / meta["demo_gif"]
     demo_target = repo / "static/product-demo.gif"
     asset_changes = []

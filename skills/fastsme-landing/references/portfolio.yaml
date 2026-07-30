@@ -1,4 +1,13 @@
 apps:
+  FastWiki:
+    cohort: custom
+    slug: wiki
+    accent: "#4f46e5"
+    tint: "#eef2ff"
+    eyebrow: Open knowledge for independent teams
+    headline: Turn what your team knows into momentum.
+    description: Capture handbooks, processes, decisions and project knowledge in a connected workspace that stays portable.
+    features: [Tiptap rich editing and Markdown, Comments and recoverable history, FastOffice links and open APIs]
   FastCal:
     cohort: custom
     slug: calendar
