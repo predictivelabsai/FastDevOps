@@ -28,6 +28,13 @@ fleet. Read the target repository's `AGENTS.md` or `CLAUDE.md` when present.
 7. Run the target repository's compile/tests, then visually check desktop and
    mobile widths with Playwright. Exercise Sign In through the Google account
    chooser without completing a production login unless authorised.
+8. For changes to the `fastsme-landing` repository, commit and push the
+   validated task changes by default unless the user explicitly requests
+   local-only work, no commit, or no push. Before committing, run
+   `git diff --check`, inspect the staged paths for secrets and unrelated
+   changes, use a descriptive commit message, push the current tracking
+   branch, and verify the remote branch resolves to the new commit. Do not
+   apply this default to other Fast* repositories.
 
 Run the sync script without `--check` only when the user explicitly authorises
 changes across the Fast* repositories. The script is idempotent and refuses
