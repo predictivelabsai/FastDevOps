@@ -14,6 +14,17 @@ defaults:
     concurrency: 80
 
 services:
+  fastcal:
+    description: FastCal open calendar and public scheduling
+    repo: predictivelabsai/FastCal
+    local_dir: FastCal
+    port: 5021
+    domain: https://calendar.fastsme.com
+    health: {path: /health}
+    volume: /data
+    env:
+      required: [FASTCAL_SECRET, FASTOFFICE_SSO_SECRET]
+      runtime: {FASTCAL_ENV: production, FASTCAL_PORT: "5021", FASTCAL_DB: /data/fastcal.sqlite, FASTOFFICE_URL: https://office.fastsme.com, FASTCAL_DEV_LOGIN: "false"}
   fastoffice:
     description: FastOffice open-source productivity suite and AI workspace
     repo: predictivelabsai/FastOffice
@@ -30,6 +41,7 @@ services:
         - POSTMARK_API_TOKEN
         - FASTOFFICE_SESSION_SECRET
         - FASTOFFICE_ENCRYPTION_KEY
+        - FASTOFFICE_SSO_SECRET
       runtime:
         FASTOFFICE_ENV: production
         FASTOFFICE_PORT: "5020"
@@ -37,6 +49,7 @@ services:
         FASTOFFICE_PUBLIC_URL: https://office.fastsme.com
         FASTOFFICE_BOOTSTRAP_ADMIN: kaljuvee@gmail.com
         FASTOFFICE_DEV_LOGIN: "false"
+        FASTOFFICE_SUITE_SSO_READY: "true"
         MODEL_PROVIDER: xai
         GOOGLE_REDIRECT_URI: https://office.fastsme.com/auth/google/callback
         FROM_EMAIL: info@fastsme.com
@@ -108,7 +121,7 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTOFFICE_SSO_SECRET]
       runtime: {FASTDOCS_PORT: "5016", FASTDOCS_DB: /data/fastdocs.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://docs.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://docs.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastdrive:
     repo: predictivelabsai/FastDrive
@@ -118,7 +131,7 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTOFFICE_SSO_SECRET]
       runtime: {FASTDRIVE_PORT: "5012", FASTDRIVE_DB: /data/fastdrive.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://drive.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://drive.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fasterp:
     repo: predictivelabsai/FastERP
@@ -179,7 +192,7 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTOFFICE_SSO_SECRET]
       runtime: {FASTINSIGHTS_PORT: "5008", FASTINSIGHTS_DB: /data/fastinsights.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://insights.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://insights.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastinsure:
     repo: kaljuvee/insurance-demo
@@ -209,7 +222,7 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTOFFICE_SSO_SECRET]
       runtime: {FASTMAIL_PORT: "5009", FASTMAIL_DB: /data/fastmail.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://mail.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://mail.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastmeet:
     repo: predictivelabsai/FastMeet
@@ -219,7 +232,7 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTOFFICE_SSO_SECRET]
       runtime: {FASTMEET_PORT: "5015", FASTMEET_DB: /data/fastmeet.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://meet.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://meet.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastppm:
     repo: predictivelabsai/FastPPM
@@ -239,7 +252,7 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTOFFICE_SSO_SECRET]
       runtime: {FASTSHEETS_PORT: "5014", FASTSHEETS_DB: /data/fastsheets.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://sheets.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://sheets.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastslides:
     repo: predictivelabsai/FastSlides
@@ -249,5 +262,5 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTOFFICE_SSO_SECRET]
       runtime: {FASTSLIDES_PORT: "5013", FASTSLIDES_DB: /data/fastslides.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://slides.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://slides.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}

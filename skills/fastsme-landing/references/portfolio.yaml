@@ -1,4 +1,13 @@
 apps:
+  FastCal:
+    cohort: custom
+    slug: calendar
+    accent: "#0891b2"
+    tint: "#ecfeff"
+    eyebrow: Open team calendar
+    headline: Make time work for everyone.
+    description: Coordinate shared calendars, availability, recurring events, reminders, FastMeet links, and public booking pages.
+    features: [Shared calendars and events, Public scheduling links, Availability and conflict prevention]
   FastFunnel:
     demo_gif: docs/demo/fastfunnel-walkthrough.gif
     cohort: custom

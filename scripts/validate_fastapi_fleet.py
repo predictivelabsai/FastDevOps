@@ -18,6 +18,7 @@ def main() -> int:
     failures: list[str] = []
     checked = 0
     custom_dirs = {
+        "FastCal": ".",
         "FastFunnel": "fastfunnel/web",
         "FastCMS": "app",
         "FastFund": "web",
@@ -25,6 +26,7 @@ def main() -> int:
         "FastPPM": "web",
     }
     entrypoints = {
+        "FastCal": "app.py",
         "FastFunnel": "fastfunnel/app.py",
         "FastCMS": "main.py",
         "FastFund": "web/app.py",
@@ -71,7 +73,7 @@ def main() -> int:
         if not any("post" in operations for operations in paths.values()):
             failures.append(f"{name}: no selected write operation")
 
-        landing = (module_dir / "landing.py").read_text()
+        landing = (repo / "views.py").read_text() if name == "FastCal" else (module_dir / "landing.py").read_text()
         developer = (module_dir / "developer.py").read_text()
         source = entrypoint.read_text()
         for needle, label, text in (
