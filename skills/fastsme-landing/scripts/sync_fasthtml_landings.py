@@ -34,6 +34,7 @@ from urllib.parse import quote
 from fasthtml.common import *
 
 from .account_auth import AUTH_CSS, AUTH_JS, auth_modal
+from .seo import seo_meta
 
 ACCENT = "{accent}"
 TINT = "{tint}"
@@ -67,6 +68,7 @@ def landing_page():
         Head(Title("{name} · FastSME"), Meta(charset="utf-8"),
              Meta(name="viewport", content="width=device-width, initial-scale=1"),
              Meta(name="description", content="{description}"),
+             *seo_meta(),
              Link(rel="icon", type="image/svg+xml", href=FAVICON),
              Link(rel="preconnect", href="https://fonts.googleapis.com"),
              Link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;750&display=swap"),
@@ -110,6 +112,7 @@ from fasthtml.common import *
 
 from .{api_module} import RESOURCES
 from .landing import FAVICON
+from .seo import seo_meta
 
 ACCENT = "{accent}"
 TINT = "{tint}"
@@ -179,6 +182,11 @@ def developer_page():
             Meta(charset="utf-8"),
             Meta(name="viewport", content="width=device-width, initial-scale=1"),
             Meta(name="description", content="Developer API documentation for {name}."),
+            *seo_meta(
+                path="/developers",
+                title="{name} Developer API · FastSME",
+                description="Build integrations with the public {name} API, OpenAPI schemas, examples, and token-gated writes.",
+            ),
             Link(rel="icon", type="image/svg+xml", href=FAVICON),
             Link(rel="preconnect", href="https://fonts.googleapis.com"),
             Link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;750&display=swap"),
@@ -247,6 +255,185 @@ def exchange(request, code):
     return {"email": email, "name": info.get("name") or email}
 '''
 
+
+def render_seo_module(name: str, meta: dict) -> str:
+    """Render indexable metadata and crawler routes from portfolio truth."""
+    description = meta["description"]
+    eyebrow = meta["eyebrow"].lower()
+    keywords = tuple(dict.fromkeys((
+        name,
+        f"open source {eyebrow}",
+        f"{eyebrow} software",
+        f"SME {eyebrow}",
+        *meta["features"],
+        "FastSME",
+        "open source business software",
+    )))
+    base_url = f"https://{meta['slug']}.fastsme.com"
+    sitemap_paths = tuple(meta.get("sitemap_paths", ("/", "/developers")))
+    return f'''"""Search metadata, structured data, sitemap, and crawler policy."""
+from __future__ import annotations
+
+import json
+
+from fasthtml.common import Link, Meta, NotStr, Script
+from starlette.responses import Response
+
+PRODUCT = {name!r}
+BASE_URL = {base_url!r}
+DESCRIPTION = {description!r}
+KEYWORDS = {keywords!r}
+FEATURES = {tuple(meta["features"])!r}
+SITEMAP_PATHS = {sitemap_paths!r}
+
+
+def seo_meta(
+    *,
+    path: str = "/",
+    title: str | None = None,
+    description: str | None = None,
+):
+    canonical = BASE_URL + (path if path != "/" else "")
+    page_title = title or f"{{PRODUCT}} · Open-source {{KEYWORDS[2].title()}}"
+    page_description = description or DESCRIPTION
+    structured = {{
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": PRODUCT,
+        "url": canonical,
+        "description": page_description,
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "isAccessibleForFree": True,
+        "license": "https://opensource.org/license/mit",
+        "featureList": list(FEATURES),
+        "publisher": {{
+            "@type": "Organization",
+            "name": "FastSME",
+            "url": "https://fastsme.com",
+        }},
+    }}
+    return (
+        Link(rel="canonical", href=canonical),
+        Meta(name="robots", content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"),
+        Meta(name="keywords", content=", ".join(KEYWORDS)),
+        Meta(property="og:type", content="website"),
+        Meta(property="og:site_name", content="FastSME"),
+        Meta(property="og:title", content=page_title),
+        Meta(property="og:description", content=page_description),
+        Meta(property="og:url", content=canonical),
+        Meta(name="twitter:card", content="summary"),
+        Meta(name="twitter:title", content=page_title),
+        Meta(name="twitter:description", content=page_description),
+        Script(NotStr(json.dumps(structured, separators=(",", ":"))), type="application/ld+json"),
+    )
+
+
+async def sitemap():
+    urls = "\\n".join(
+        f'  <url><loc>{{BASE_URL}}{{path}}</loc><changefreq>{{"weekly" if path == "/" else "monthly"}}</changefreq><priority>{{"1.0" if path == "/" else "0.6"}}</priority></url>'
+        for path in SITEMAP_PATHS
+    )
+    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{{urls}}
+</urlset>
+"""
+    return Response(xml, media_type="application/xml")
+
+
+async def robots():
+    body = f"""User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /app
+Disallow: /auth/
+Disallow: /login
+Disallow: /register
+Disallow: /api/
+
+Sitemap: {{BASE_URL}}/sitemap.xml
+"""
+    return Response(body, media_type="text/plain")
+
+
+def register_seo_routes(app):
+    paths = {{getattr(route, "path", None) for route in app.routes}}
+    if "/sitemap.xml" not in paths:
+        app.route("/sitemap.xml", methods=["GET"])(sitemap)
+        app.routes.insert(0, app.routes.pop())
+    if "/robots.txt" not in paths:
+        app.route("/robots.txt", methods=["GET"])(robots)
+        app.routes.insert(0, app.routes.pop())
+'''
+
+
+SEO_TARGETS = {
+    "FastBooking": (
+        "app/ui/seo.py",
+        "app/ui/main.py",
+        "app.ui.seo",
+        "    # register page routes",
+    ),
+    "FastFunnel": ("fastfunnel/web/seo.py", "fastfunnel/app.py", "fastfunnel.web.seo", "\ndef main():"),
+    "FastCMS": ("app/seo.py", "main.py", "app.seo", "\nserve()"),
+    "FastFund": ("web/seo.py", "web/app.py", "web.seo", None),
+    "FastLMS": ("components/seo.py", "main.py", "components.seo", '\nif __name__ == "__main__":'),
+    "FastPPM": ("web/seo.py", "web/app.py", "web.seo", None),
+    "FastWiki": ("fastwiki/seo.py", "app.py", "fastwiki.seo", None),
+    "FastCal": ("seo.py", "app.py", "seo", None),
+    "FastOffice": ("seo.py", "app.py", "seo", None),
+}
+
+
+def sync_seo(name: str, meta: dict, check: bool) -> list[str]:
+    """Synchronise the SEO module and its application route registration."""
+    repo = FASTCO / name
+    seo_rel, app_rel, module, marker = SEO_TARGETS.get(
+        name, ("web/seo.py", "web_app.py", "web.seo", '\nif __name__ == "__main__":')
+    )
+    seo_path = repo / seo_rel
+    expected = (
+        seo_path.read_text()
+        if name == "FastBooking" and seo_path.exists()
+        else render_seo_module(name, meta)
+    )
+    changes = []
+    if not seo_path.exists() or seo_path.read_text() != expected:
+        changes.append(seo_rel)
+        if not check:
+            seo_path.parent.mkdir(parents=True, exist_ok=True)
+            seo_path.write_text(expected)
+
+    app_path = repo / app_rel
+    source = app_path.read_text()
+    updated = source
+    import_line = f"from {module} import register_seo_routes"
+    if import_line not in updated:
+        lines = updated.splitlines(keepends=True)
+        insertion = next(
+            (index + 1 for index, line in enumerate(lines) if "landing import" in line),
+            next((index + 1 for index, line in enumerate(lines) if line.startswith("from fasthtml.common import")), 1),
+        )
+        lines.insert(insertion, import_line + "\n")
+        updated = "".join(lines)
+    registration = (
+        "    register_seo_routes(app)"
+        if name == "FastBooking"
+        else "register_seo_routes(app)"
+    )
+    if registration not in updated:
+        block = f"\n\n{registration}\n"
+        if marker and marker in updated:
+            updated = updated.replace(marker, block + marker, 1)
+        else:
+            updated = updated.rstrip() + block
+    if updated != source:
+        changes.append(app_rel)
+        if not check:
+            app_path.write_text(updated)
+    return changes
+
 IMPORT_MARKER = "from web import views, ai"
 ROUTES = '''
 
@@ -274,6 +461,8 @@ def google_callback(session, request, code: str = "", state: str = "", error: st
 def sync_app(name: str, meta: dict, check: bool) -> list[str]:
     repo = FASTCO / name
     meta = {"demo_url": "/static/product-demo.gif", **meta}
+    if meta.get("cohort") == "streamlit":
+        return []
     custom_paths = {
         "FastFunnel": "fastfunnel/web/landing.py",
         "FastCMS": "app/landing.py",
@@ -281,13 +470,15 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
         "FastLMS": "components/landing.py",
         "FastPPM": "web/landing.py",
     }
+    seo_changes = sync_seo(name, meta, check)
     # Some products provide intentionally bespoke landing pages. They still
-    # belong in the portfolio catalogue, but are not template-sync targets.
+    # belong in the portfolio catalogue. Their SEO routes are synchronised,
+    # while their intentionally bespoke landing markup remains hand-maintained.
     if meta.get("cohort") == "custom" and name not in custom_paths:
-        return []
+        return seo_changes
     demo_source = repo / meta["demo_gif"]
     demo_target = repo / "static/product-demo.gif"
-    asset_changes = []
+    asset_changes = seo_changes
     if not demo_source.is_file():
         raise SystemExit(f"{name}: missing demo GIF: {demo_source.relative_to(repo)}")
     if not demo_target.is_file() or demo_target.read_bytes() != demo_source.read_bytes():
@@ -295,8 +486,6 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
         if not check:
             demo_target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(demo_source, demo_target)
-    if meta.get("cohort") == "streamlit":
-        return asset_changes
     if meta.get("cohort") == "custom":
         path = repo / custom_paths[name]
         expected = LANDING_TEMPLATE.format(name=name, **meta)

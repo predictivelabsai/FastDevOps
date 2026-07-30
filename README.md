@@ -6,7 +6,7 @@ Cloud Run migration path available.
 
 ## Service fleet
 
-The catalog in `config/services.yaml` defines the 19 FastSME applications.
+The catalog in `config/services.yaml` defines the FastSME applications.
 `data/fast-domains.csv` is the DNS/source inventory used to audit that catalog.
 
 ## Setup
@@ -109,7 +109,7 @@ are documented in
 
 ## Product APIs
 
-The 18 migrated products expose public FastAPI read surfaces backed by their
+The 19 migrated products expose public FastAPI read surfaces backed by their
 current demo databases, selected token-gated writes, committed OpenAPI
 snapshots, and branded developer documentation:
 
@@ -128,3 +128,23 @@ python scripts/validate_fastapi_fleet.py
 
 See [docs/fastsme-api-contract.md](docs/fastsme-api-contract.md) for the access
 model, compatibility rules, and release gates.
+
+## Search discovery
+
+Every non-Streamlit FastSME product publishes an XML sitemap and crawler policy:
+
+```text
+https://<product>.fastsme.com/sitemap.xml
+https://<product>.fastsme.com/robots.txt
+```
+
+Landing and developer pages include product-specific canonical URLs, search
+descriptions, capability keywords, Open Graph and Twitter metadata, and
+SoftwareApplication structured data. The portfolio catalogue remains the
+single source for product wording and sitemap domains.
+
+Validate this contract without starting or deploying the applications:
+
+```bash
+python scripts/validate_seo_fleet.py
+```

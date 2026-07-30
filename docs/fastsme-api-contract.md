@@ -1,6 +1,6 @@
 # FastSME API contract
 
-The 18 migrated FastSME products expose a same-process FastAPI integration
+The 19 migrated FastSME products expose a same-process FastAPI integration
 surface. FastInsure remains outside this contract while it is a Streamlit
 application.
 
@@ -67,4 +67,3 @@ Before a fleet release:
 6. Compare committed `swagger.json` with the runtime schema.
 7. Check `/developers` at desktop and mobile widths.
 8. Deploy repositories independently and verify the exact pushed commit.
-

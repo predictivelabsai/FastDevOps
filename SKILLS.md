@@ -25,6 +25,7 @@ navigation contract with:
 
 ```bash
 python scripts/validate_fastapi_fleet.py
+python scripts/validate_seo_fleet.py
 ```
 
 ## FastFunnel rollout

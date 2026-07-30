@@ -154,6 +154,7 @@ activemq-data/
 .envrc
 .venv
 .playwright-cli/
+.sesskey
 .pulumi/
 Pulumi.*.yaml
 !infra/gcp/Pulumi.yaml

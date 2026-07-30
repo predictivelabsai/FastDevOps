@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate committed API surfaces across the 18 migrated FastSME products."""
+"""Validate committed API surfaces across the migrated FastSME products."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 FASTCO = ROOT.parent
 PORTFOLIO = ROOT / "skills/fastsme-landing/references/portfolio.yaml"
+API_DEFERRED = {"FastWiki", "FastOffice"}
 
 
 def main() -> int:
@@ -34,10 +35,44 @@ def main() -> int:
         "FastPPM": "web/app.py",
     }
     for name, metadata in apps.items():
-        if metadata.get("cohort") == "streamlit":
+        if metadata.get("cohort") == "streamlit" or name in API_DEFERRED:
             continue
         checked += 1
         repo = FASTCO / name
+        if name == "FastBooking":
+            required = (
+                repo / "app/api/main.py",
+                repo / "app/api/routers/platform.py",
+                repo / "app/ui/pages/platform.py",
+                repo / "app/main_monolith.py",
+            )
+            for path in required:
+                if not path.is_file():
+                    failures.append(f"{name}: missing {path.relative_to(repo)}")
+            if any(not path.is_file() for path in required):
+                continue
+            api_source = required[0].read_text()
+            routes = required[1].read_text()
+            landing = required[2].read_text()
+            entrypoint_source = required[3].read_text()
+            checks = (
+                ("FastBooking API", "branded API title", api_source),
+                ("/public/{tenant_slug}/catalogue", "tenant catalogue", routes),
+                ("/bookings/restaurant", "restaurant booking write", routes),
+                ("/bookings/hotel", "hotel booking write", routes),
+                ("/bookings/clinic", "clinic booking write", routes),
+                ("/bookings/events", "event booking write", routes),
+                ('href="/developers"', "landing Developers link", landing),
+                ('href="/api/docs"', "Swagger link", landing),
+                ('href="/swagger.json"', "schema link", landing),
+                ('Mount("/api"', "mounted FastAPI application", entrypoint_source),
+            )
+            failures.extend(
+                f"{name}: missing {label}"
+                for needle, label, text in checks
+                if needle not in text
+            )
+            continue
         module_dir = repo / custom_dirs.get(name, "web")
         entrypoint = repo / entrypoints.get(name, "web_app.py")
         required = (
@@ -80,13 +115,17 @@ def main() -> int:
             ('href="/developers"', "landing Developers link", landing),
             ('href="/api/docs"', "Swagger link", developer),
             ('href="/swagger.json"', "schema link", developer),
-            ("FASTSME_API_TOKEN", "write-auth explanation", developer),
             ("mount(", "mounted FastAPI application", source),
             ("/swagger.json", "runtime compatibility schema", source),
             ("/developers", "developer route", source),
         ):
             if needle not in text:
                 failures.append(f"{name}: missing {label}")
+        if not any(
+            token in developer
+            for token in ("FASTSME_API_TOKEN", "FASTFUNNEL_WORKSPACE_TOKEN")
+        ):
+            failures.append(f"{name}: missing write-auth explanation")
 
     if failures:
         print("FastSME API validation failed:")

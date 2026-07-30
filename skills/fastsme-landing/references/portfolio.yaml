@@ -26,6 +26,16 @@ apps:
     headline: One booking platform. Configured for your business.
     description: Take restaurant orders and table reservations, sell hotel stays and event tickets, or connect public appointments directly to FastClinic.
     features: [Admin-configurable product modules, Multi-tenant booking and inventory, Restaurant commerce and FastClinic integration]
+  FastOffice:
+    cohort: custom
+    slug: office
+    sitemap_paths: ["/"]
+    accent: "#4f46e5"
+    tint: "#eef2ff"
+    eyebrow: Open-source productivity suite
+    headline: Your work. Your data. Your freedom.
+    description: Connect documents, spreadsheets, presentations, files, meetings, mail, calendars, knowledge, analytics, and AI in one open workspace.
+    features: [Connected open-source productivity apps, Self-hosted business collaboration, AI-assisted work without per-seat lock-in]
   FastFunnel:
     demo_gif: docs/demo/fastfunnel-walkthrough.gif
     cohort: custom
