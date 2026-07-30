@@ -83,6 +83,15 @@ apps:
     headline: One operational backbone for the whole business.
     description: Connect sales, purchasing, inventory, invoicing, payments, projects, expenses, and the general ledger.
     features: [Order to cash, Purchasing and inventory, Accounting and reporting]
+  FastFPA:
+    cohort: custom
+    slug: fpa
+    accent: "#0f766e"
+    tint: "#f0fdfa"
+    eyebrow: Financial planning & analysis
+    headline: Plan forward with numbers everyone can trust.
+    description: Connect actuals, drivers, budgets, forecasts, scenarios, and performance reviews in one governed planning workspace.
+    features: [Driver-based budgets and forecasts, Scenarios and variance analysis, Approvals lineage and management reporting]
   FastESM:
     demo_gif: docs/demo/fastesm-demo.gif
     slug: esm

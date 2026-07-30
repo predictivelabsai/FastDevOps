@@ -164,6 +164,17 @@ services:
     env:
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
       runtime: {FASTERP_PORT: "5011", FASTERP_DB: /data/fasterp.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://erp.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://erp.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+  fastfpa:
+    description: FastFPA financial planning and analysis
+    repo: predictivelabsai/FastFPA
+    local_dir: FastFPA
+    port: 5018
+    domain: https://fpa.fastsme.com
+    health: {path: /healthz}
+    volume: /data
+    env:
+      required: [FASTFPA_SECRET, XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, FASTOFFICE_SSO_SECRET]
+      runtime: {FASTFPA_ENV: production, FASTFPA_PORT: "5018", FASTFPA_DB: /data/fastfpa.sqlite, FASTFPA_PUBLIC_URL: https://fpa.fastsme.com, MODEL_PROVIDER: xai, MODEL_NAME: grok-4-1-fast-reasoning, GOOGLE_REDIRECT_URI: https://fpa.fastsme.com/auth/google/callback}
   fastesm:
     repo: predictivelabsai/FastESM
     local_dir: FastESM
