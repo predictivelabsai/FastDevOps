@@ -48,6 +48,10 @@ services:
     local_dir: FastOffice
     port: 5020
     domain: https://office.fastsme.com
+    domains:
+      - https://office.fastsme.com
+      - https://fastoffice.org
+      - https://www.fastoffice.org
     health: {path: /health}
     volume: /data
     env:

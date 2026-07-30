@@ -149,6 +149,8 @@ def application_settings(name: str, service: dict) -> dict:
         "limits_cpus": service.get("limits_cpus", "1"),
     }
     settings["custom_docker_run_options"] = ""
+    if service.get("domains"):
+        settings["domains"] = ",".join(service["domains"])
     return settings
 
 
