@@ -1,4 +1,5 @@
 A record,Domain(s),IP,Local,Remote,Landing page model repo / colour scheme
+booking,booking.fastsme.com,191.218.164.166,dev/fastco/FastBooking,https://github.com/predictivelabsai/FastBooking,dev/plai/carhero
 funnel,funnel.fastsme.com,191.218.164.166,dev/fastco/FastFunnel,https://github.com/predictivelabsai/FastFunnel,dev/plai/carhero
 clinic,clinic.fastsme.com,191.218.164.166,dev/fastco/FastClinic,https://github.com/predictivelabsai/FastClinic,dev/plai/carhero
 cms,cms.fastsme.com,191.218.164.166,dev/fastco/FastCMS,https://github.com/predictivelabsai/FastCMS,dev/plai/carhero
