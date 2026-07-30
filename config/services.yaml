@@ -222,6 +222,16 @@ services:
     env:
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
       runtime: {DATA_STORAGE: sqlite, DB_URL: "sqlite:////data/fastfund.sqlite", DOC_LOCAL_DIR: /data/docs, LLM_PROVIDER: xai, FASTFUND_AUTOSEED: "1", GOOGLE_REDIRECT_URI: https://fund.fastsme.com/auth/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://fund.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+  fastvc:
+    description: FastVC venture sourcing, diligence, IC and portfolio workspace
+    repo: predictivelabsai/FastVC
+    local_dir: FastVC
+    port: 5059
+    domain: https://vc.fastsme.com
+    health: {path: /healthz}
+    env:
+      required: [DB_URL, XAI_API_KEY, TAVILY_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      runtime: {APP_ENV: production, PORT: "5059", SERVICE_URL: https://vc.fastsme.com, FROM_NAME: FastVC, DIGEST_ENABLED: "0"}
   fasthelpdesk:
     repo: predictivelabsai/FastHelpdesk
     local_dir: FastHelpdesk
