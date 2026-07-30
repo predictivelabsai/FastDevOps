@@ -230,7 +230,7 @@ services:
     domain: https://vc.fastsme.com
     health: {path: /healthz}
     env:
-      required: [DB_URL, XAI_API_KEY, TAVILY_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      required: [DB_URL, XAI_API_KEY, TAVILY_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FROM_EMAIL]
       runtime: {APP_ENV: production, PORT: "5059", SERVICE_URL: https://vc.fastsme.com, FROM_NAME: FastVC, DIGEST_ENABLED: "0"}
   fasthelpdesk:
     repo: predictivelabsai/FastHelpdesk
