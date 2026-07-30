@@ -17,6 +17,15 @@ apps:
     headline: Make time work for everyone.
     description: Coordinate shared calendars, availability, recurring events, reminders, FastMeet links, and public booking pages.
     features: [Shared calendars and events, Public scheduling links, Availability and conflict prevention]
+  FastBooking:
+    cohort: custom
+    slug: booking
+    accent: "#0f766e"
+    tint: "#f0fdfa"
+    eyebrow: Configurable bookings and commerce
+    headline: One booking platform. Configured for your business.
+    description: Take restaurant orders and table reservations, sell hotel stays and event tickets, or connect public appointments directly to FastClinic.
+    features: [Admin-configurable product modules, Multi-tenant booking and inventory, Restaurant commerce and FastClinic integration]
   FastFunnel:
     demo_gif: docs/demo/fastfunnel-walkthrough.gif
     cohort: custom
