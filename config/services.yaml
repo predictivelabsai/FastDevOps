@@ -332,6 +332,22 @@ services:
     env:
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTOFFICE_SSO_SECRET]
       runtime: {FASTSLIDES_PORT: "5013", FASTSLIDES_DB: /data/fastslides.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://slides.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://slides.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+  fastsso:
+    description: Educational enterprise identity connection broker
+    repo: predictivelabsai/FastSSO
+    local_dir: FastSSO
+    port: 5015
+    domain: https://sso.fastsme.com
+    health: {path: /health}
+    volume: /data
+    env:
+      required: [FASTSSO_ADMIN_TOKEN]
+      runtime:
+        FASTSSO_BASE_URL: https://sso.fastsme.com
+        FASTSSO_DB: /data/fastsso.sqlite
+        FASTSSO_KEY_DIR: /data/keys
+        FASTSSO_CODE_TTL_SECONDS: "300"
+        FASTSSO_TOKEN_TTL_SECONDS: "3600"
   fastdatagov:
     description: FastDataGov open-source data governance platform
     repo: predictivelabsai/FastDataGov
