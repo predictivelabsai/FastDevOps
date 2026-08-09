@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import secrets
 import ssl
 import sys
 import urllib.request
@@ -128,7 +129,7 @@ def provision_body(name: str, service: dict, env: dict) -> dict:
         "build_pack": build["type"],
         "ports_exposes": str(service["port"]),
         "name": name,
-        "domains": service["domain"],
+        "domains": ",".join(service.get("domains", [service["domain"]])),
         "is_auto_deploy_enabled": True,
         "is_force_https_enabled": True,
         "autogenerate_domain": False,
@@ -144,7 +145,9 @@ def provision_body(name: str, service: dict, env: dict) -> dict:
 def application_settings(name: str, service: dict) -> dict:
     settings = {
         "description": service.get("description", f"{name} FastSME service"),
-        "health_check_enabled": False,
+        "health_check_enabled": True,
+        "health_check_path": service["health"]["path"],
+        "is_auto_deploy_enabled": True,
         "limits_memory": service.get("limits_memory", "768M"),
         "limits_cpus": service.get("limits_cpus", "1"),
     }
@@ -213,17 +216,23 @@ def cmd_env(args):
                     print("aborted")
                     continue
             local_dir = ROOT.parent / service.get("local_dir", name)
-            source = load_local_env(local_dir / ".env")
-            shared = load_local_env(ROOT.parent / "FastFunnel" / ".env")
             env_config = service.get("env", {})
+            source = {}
+            for source_name in env_config.get("sources", []):
+                source.update(load_local_env(ROOT.parent / source_name / ".env"))
+            source.update(load_local_env(local_dir / ".env"))
+            remote_names = set(api.environment_names(app["uuid"]))
             variables = {
-                key: source.get(key) or shared[key]
+                key: source[key]
                 for key in env_config.get("required", [])
-                if source.get(key) or shared.get(key)
+                if source.get(key)
             }
+            for key in env_config.get("generate", []):
+                if key not in remote_names and key not in variables:
+                    variables[key] = secrets.token_urlsafe(48)
             missing = [
                 key for key in env_config.get("required", [])
-                if key not in variables
+                if key not in variables and key not in remote_names
             ]
             if missing:
                 raise RuntimeError(

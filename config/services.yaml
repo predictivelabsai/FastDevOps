@@ -36,12 +36,27 @@ services:
     repo: predictivelabsai/FastCal
     local_dir: FastCal
     port: 5021
-    domain: https://calendar.fastsme.com
+    domain: https://cal.fastsme.com
+    domains:
+      - https://cal.fastsme.com
+      - https://calendar.fastsme.com
     health: {path: /health}
-    volume: /data
+    database_schema: fast_cal
     env:
-      required: [FASTCAL_SECRET, FASTOFFICE_SSO_SECRET]
-      runtime: {FASTCAL_ENV: production, FASTCAL_PORT: "5021", FASTCAL_DB: /data/fastcal.sqlite, FASTOFFICE_URL: https://office.fastsme.com, FASTCAL_DEV_LOGIN: "false"}
+      sources: [FastERP, FastMeet, FastFunnel]
+      required: [DB_URL, FASTCAL_SECRET, FASTCAL_ENCRYPTION_KEY, FASTOFFICE_SSO_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      generate: [FASTCAL_SECRET, FASTCAL_ENCRYPTION_KEY]
+      runtime:
+        FASTCAL_ENV: production
+        FASTCAL_HOST: 0.0.0.0
+        FASTCAL_PORT: "5021"
+        FASTCAL_PUBLIC_URL: https://cal.fastsme.com
+        DB_SCHEMA: fast_cal
+        FASTOFFICE_URL: https://office.fastsme.com
+        FASTCAL_DEV_LOGIN: "false"
+        GOOGLE_REDIRECT_URI: https://cal.fastsme.com/auth/google/callback
+        FASTMEET_URL: https://meet.fastsme.com
+        FROM_EMAIL: info@fastsme.com
   fastbooking:
     description: Multi-tenant booking and restaurant commerce platform
     repo: predictivelabsai/FastBooking

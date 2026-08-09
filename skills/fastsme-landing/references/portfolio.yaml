@@ -10,7 +10,7 @@ apps:
     features: [Tiptap rich editing and Markdown, Comments and recoverable history, FastOffice links and open APIs]
   FastCal:
     cohort: custom
-    slug: calendar
+    slug: cal
     accent: "#0891b2"
     tint: "#ecfeff"
     eyebrow: Open team calendar
