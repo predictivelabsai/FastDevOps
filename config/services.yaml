@@ -332,3 +332,27 @@ services:
     env:
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTOFFICE_SSO_SECRET]
       runtime: {FASTSLIDES_PORT: "5013", FASTSLIDES_DB: /data/fastslides.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://slides.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://slides.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+  fastdatagov:
+    description: FastDataGov open-source data governance platform
+    repo: predictivelabsai/FastDataGov
+    local_dir: FastDataGov
+    port: 5062
+    domain: https://datagov.fastsme.com
+    health: {path: /healthz}
+    database: fastdatagov-postgres
+    limits_memory: 1G
+    env:
+      required: [APP_SECRET, DATABASE_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
+      runtime:
+        APP_ENV: production
+        REPOSITORY_MODE: postgres
+        AUTH_MODE: google
+        DEV_AUTH_ENABLED: "false"
+        HOST: 0.0.0.0
+        PORT: "5062"
+        BASE_URL: https://datagov.fastsme.com
+        ALLOWED_HOSTS: datagov.fastsme.com
+        GOOGLE_REDIRECT_URI: https://datagov.fastsme.com/auth/google/callback
+        GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
+        GOVERNANCE_ADMIN_EMAILS: kaljuvee@gmail.com
+        RUN_BACKGROUND_WORKERS: "true"
