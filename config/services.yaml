@@ -339,13 +339,13 @@ services:
     port: 5062
     domain: https://datagov.fastsme.com
     health: {path: /healthz}
-    database: fastdatagov-postgres
     limits_memory: 1G
     env:
-      required: [APP_SECRET, DATABASE_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
+      required: [APP_SECRET, DB_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
       runtime:
         APP_ENV: production
         REPOSITORY_MODE: postgres
+        DB_SCHEMA: fast_datagov
         AUTH_MODE: google
         DEV_AUTH_ENABLED: "false"
         HOST: 0.0.0.0
