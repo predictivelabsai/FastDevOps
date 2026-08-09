@@ -351,7 +351,7 @@ services:
         HOST: 0.0.0.0
         PORT: "5062"
         BASE_URL: https://datagov.fastsme.com
-        ALLOWED_HOSTS: datagov.fastsme.com
+        ALLOWED_HOSTS: datagov.fastsme.com,localhost,127.0.0.1
         GOOGLE_REDIRECT_URI: https://datagov.fastsme.com/auth/google/callback
         GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
         GOVERNANCE_ADMIN_EMAILS: kaljuvee@gmail.com
