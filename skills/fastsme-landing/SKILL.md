@@ -17,6 +17,10 @@ fleet. Read the target repository's `AGENTS.md` or `CLAUDE.md` when present.
    product.
 3. Keep the public surface white, typographically quiet, and specific about
    actual product capabilities. Use one primary action and a top-right Sign In.
+   Every public Fast* landing also includes a `Partners` navigation link and
+   the shared integration-partner band for SAASPASS, Sixty Four, EDI Labs,
+   Predictive Labs, and Consistente. Preserve the verified external profile
+   links and label every organisation `Integration Partner`.
 4. Keep the authenticated product at its existing route. At `/`, show the
    landing only to anonymous visitors when the app already uses `/` internally.
 5. Use `/auth/google` and `/auth/google/callback` for new OAuth integrations.
