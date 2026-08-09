@@ -83,4 +83,6 @@ class Coolify:
         self.request("PATCH", f"/applications/{uuid}/envs/bulk", {"data": data})
 
     def deploy(self, uuid: str) -> dict:
-        return self.request("POST", f"/applications/{uuid}/start") or {}
+        result = self.request("POST", "/deploy", {"uuid": uuid}) or {}
+        deployments = result.get("deployments", [])
+        return deployments[0] if deployments else result
