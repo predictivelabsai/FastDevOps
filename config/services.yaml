@@ -20,7 +20,7 @@ services:
     local_dir: FastAccounts
     port: 5012
     domain: https://accounts.fastsme.com
-    health: {path: /healthz}
+    health: {path: /healthz, enabled: false}
     volume: /data
     database_schema: fast_accounts
     env:

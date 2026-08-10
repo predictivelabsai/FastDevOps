@@ -150,7 +150,7 @@ def provision_body(name: str, service: dict, env: dict) -> dict:
 def application_settings(name: str, service: dict) -> dict:
     settings = {
         "description": service.get("description", f"{name} FastSME service"),
-        "health_check_enabled": True,
+        "health_check_enabled": service["health"].get("enabled", True),
         "health_check_path": service["health"]["path"],
         "health_check_port": str(service["health"].get("port", service["port"])),
         "health_check_host": service["health"].get("host", "127.0.0.1"),
