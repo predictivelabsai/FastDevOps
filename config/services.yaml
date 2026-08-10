@@ -19,7 +19,7 @@ services:
     repo: predictivelabsai/FastAccounts
     local_dir: FastAccounts
     port: 5012
-    domain: https://accounts.fastsme.com
+    domain: https://fastaccounts.org
     health: {path: /healthz, enabled: false}
     volume: /data
     database_schema: fast_accounts
@@ -30,13 +30,13 @@ services:
       runtime:
         FASTACCOUNTS_PORT: "5012"
         FASTACCOUNTS_ENV_LABEL: production
-        FASTACCOUNTS_PUBLIC_URL: https://accounts.fastsme.com
+        FASTACCOUNTS_PUBLIC_URL: https://fastaccounts.org
         FASTACCOUNTS_DATA_DIR: /data
         DB_SCHEMA: fast_accounts
-        GOOGLE_REDIRECT_URI: https://accounts.fastsme.com/auth/google/callback
+        GOOGLE_REDIRECT_URI: https://fastaccounts.org/auth/google/callback
         GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
         FROM_EMAIL: info@fastsme.com
-        FASTACCOUNTS_CORS_ORIGINS: https://accounts.fastsme.com
+        FASTACCOUNTS_CORS_ORIGINS: https://fastaccounts.org
         FASTACCOUNTS_ALLOW_TEST_AUTH: "false"
   fastwiki:
     description: FastWiki open knowledge workspace

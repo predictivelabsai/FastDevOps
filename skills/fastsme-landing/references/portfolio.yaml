@@ -103,6 +103,15 @@ apps:
     headline: One operational backbone for the whole business.
     description: Connect sales, purchasing, inventory, invoicing, payments, projects, expenses, and the general ledger.
     features: [Order to cash, Purchasing and inventory, Accounting and reporting]
+  FastAccounts:
+    cohort: custom
+    slug: accounts
+    accent: "#087f5b"
+    tint: "#ecfdf5"
+    eyebrow: Bookkeeping & accounting
+    headline: Keep the books clear, current and accountant-ready.
+    description: Create invoices, record bills, reconcile bank activity, maintain balanced books, and prepare UK and Estonian tax workpapers for accountant review.
+    features: [Invoices and bills, Reconciliation and double-entry bookkeeping, UK and Estonian accountant workpapers]
   FastFPA:
     cohort: custom
     slug: fpa
