@@ -158,9 +158,12 @@ apps:
     headline: A clearer home for every people process.
     description: Manage employee records, departments, leave, attendance, payroll, and payslips without enterprise-suite overhead.
     features: [Employee records, Leave and attendance, Payroll and payslips]
-  FastInsights:
-    demo_gif: docs/demo/fastinsights-walkthrough.gif
-    slug: insights
+  FastBI:
+    demo_gif: docs/demo/fastbi-walkthrough.gif
+    cohort: custom
+    slug: bi
+    domain: https://fastbi.org
+    sitemap_paths: ["/", "/integrations", "/developers"]
     accent: "#7c3aed"
     tint: "#f5f3ff"
     eyebrow: Business intelligence

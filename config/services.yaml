@@ -303,16 +303,17 @@ services:
     env:
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
       runtime: {FASTHR_PORT: "5010", FASTHR_DB: /data/fasthr.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://hrm.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://hrm.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
-  fastinsights:
-    repo: predictivelabsai/FastInsights
-    local_dir: FastInsights
+  fastbi:
+    description: FastBI open-source business intelligence and governed analytics
+    repo: predictivelabsai/FastBI
+    local_dir: FastBI
     port: 5008
-    domain: https://insights.fastsme.com
+    domain: https://fastbi.org
     health: {path: /}
     volume: /data
     env:
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTOFFICE_SSO_SECRET]
-      runtime: {FASTINSIGHTS_PORT: "5008", FASTINSIGHTS_DB: /data/fastinsights.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://insights.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://insights.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+      runtime: {FASTBI_PORT: "5008", FASTBI_DB: /data/fastinsights.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://fastbi.org/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://fastbi.org, FROM_EMAIL: info@predictivelabs.ai}
   fastinsure:
     repo: kaljuvee/insurance-demo
     local_dir: FastInsure

@@ -45,7 +45,7 @@ remains a Streamlit application.
 | Thin apps following the shared `web_app.py` pattern | 13 |
 
 The 13-app FastHTML cohort is FastClinic, FastCRM, FastDocs, FastDrive,
-FastERP, FastESM, FastHelpdesk, FastHRM, FastInsights, FastMail, FastMeet,
+FastERP, FastESM, FastHelpdesk, FastHRM, FastBI, FastMail, FastMeet,
 FastSheets, and FastSlides.
 
 Within that cohort:
