@@ -49,6 +49,7 @@ apps:
   FastClinic:
     demo_gif: docs/demo/fastclinic-walkthrough.gif
     slug: clinic
+    domain: https://fastclinic.dev
     accent: "#1e6fb8"
     tint: "#eef7ff"
     eyebrow: Clinic operations

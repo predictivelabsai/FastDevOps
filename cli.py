@@ -10,6 +10,7 @@ import ssl
 import sys
 import urllib.request
 from pathlib import Path
+from urllib.parse import urlsplit
 
 import yaml
 
@@ -88,8 +89,11 @@ def cmd_validate(_args):
         for field in ("repo", "port", "domain", "health"):
             if not service.get(field):
                 errors.append(f"{name}: missing {field}")
-        if not str(service.get("domain", "")).endswith(".fastsme.com"):
-            errors.append(f"{name}: domain must be under fastsme.com")
+        configured_domains = service.get("domains", [service.get("domain", "")])
+        for domain in configured_domains:
+            parsed = urlsplit(str(domain))
+            if parsed.scheme != "https" or not parsed.hostname or parsed.path not in {"", "/"}:
+                errors.append(f"{name}: invalid HTTPS domain {domain!r}")
     if errors:
         raise RuntimeError("; ".join(errors))
     print(f"valid: {len(catalog())} service(s)")

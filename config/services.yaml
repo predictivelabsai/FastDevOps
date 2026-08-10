@@ -142,12 +142,24 @@ services:
     repo: predictivelabsai/FastClinic
     local_dir: FastClinic
     port: 5005
-    domain: https://clinic.fastsme.com
+    domain: https://fastclinic.dev
+    domains:
+      - https://fastclinic.dev
+      - https://www.fastclinic.dev
+      - https://clinic.fastsme.com
     health: {path: /}
     volume: /data
     env:
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
-      runtime: {FASTCLINIC_PORT: "5005", FASTCLINIC_DB: /data/fastclinic.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://clinic.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://clinic.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+      runtime:
+        FASTCLINIC_PORT: "5005"
+        FASTCLINIC_DB: /data/fastclinic.sqlite
+        FASTCLINIC_SEO_SITE: https://fastclinic.dev
+        MODEL_PROVIDER: xai
+        GOOGLE_REDIRECT_URI: https://fastclinic.dev/auth/google/callback
+        FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite
+        FASTSME_PUBLIC_URL: https://fastclinic.dev
+        FROM_EMAIL: info@predictivelabs.ai
   fastcms:
     repo: predictivelabsai/FastCMS
     local_dir: FastCMS

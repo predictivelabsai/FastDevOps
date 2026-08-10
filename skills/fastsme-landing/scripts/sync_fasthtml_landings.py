@@ -151,7 +151,7 @@ from .seo import seo_meta
 
 ACCENT = "{accent}"
 TINT = "{tint}"
-BASE_URL = "https://{slug}.fastsme.com"
+BASE_URL = "{base_url}"
 REPOSITORY = "https://github.com/predictivelabsai/{name}"
 
 DEVELOPER_CSS = """
@@ -304,7 +304,7 @@ def render_seo_module(name: str, meta: dict) -> str:
         "FastSME",
         "open source business software",
     )))
-    base_url = f"https://{meta['slug']}.fastsme.com"
+    base_url = meta.get("domain", f"https://{meta['slug']}.fastsme.com")
     sitemap_paths = tuple(meta.get("sitemap_paths", ("/", "/developers")))
     return f'''"""Search metadata, structured data, sitemap, and crawler policy."""
 from __future__ import annotations
@@ -496,6 +496,7 @@ def google_callback(session, request, code: str = "", state: str = "", error: st
 def sync_app(name: str, meta: dict, check: bool) -> list[str]:
     repo = FASTCO / name
     meta = {"demo_url": "/static/product-demo.gif", **meta}
+    meta["base_url"] = meta.get("domain", f"https://{meta['slug']}.fastsme.com")
     if meta.get("cohort") == "streamlit":
         return []
     custom_paths = {
@@ -559,7 +560,7 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
             addition = (
                 "\n# FastSME local accounts and transactional email\n"
                 "FASTSME_AUTH_DB=\n"
-                f"FASTSME_PUBLIC_URL=https://{meta['slug']}.fastsme.com\n"
+                f"FASTSME_PUBLIC_URL={meta['base_url']}\n"
                 "POSTMARK_API_TOKEN=\n"
                 "FROM_EMAIL=info@predictivelabs.ai\n"
             )
@@ -669,7 +670,7 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
         if "GOOGLE_CLIENT_ID=" not in text:
             addition = (
                 "\n# Google SSO\nGOOGLE_CLIENT_ID=\nGOOGLE_CLIENT_SECRET=\n"
-                f"GOOGLE_REDIRECT_URI=https://{meta['slug']}.fastsme.com/auth/google/callback\n"
+                f"GOOGLE_REDIRECT_URI={meta['base_url']}/auth/google/callback\n"
                 "GOOGLE_ALLOWED_DOMAINS=\nGOOGLE_ALLOWED_EMAILS=\n"
                 "FASTSME_AUTH_DB=\nFASTSME_PUBLIC_URL=\nPOSTMARK_API_TOKEN=\nFROM_EMAIL=\n"
             )
@@ -681,7 +682,7 @@ def sync_app(name: str, meta: dict, check: bool) -> list[str]:
             addition = (
                 "\n# FastSME local accounts and transactional email\n"
                 "FASTSME_AUTH_DB=\n"
-                f"FASTSME_PUBLIC_URL=https://{meta['slug']}.fastsme.com\n"
+                f"FASTSME_PUBLIC_URL={meta['base_url']}\n"
                 "POSTMARK_API_TOKEN=\n"
                 "FROM_EMAIL=info@predictivelabs.ai\n"
             )

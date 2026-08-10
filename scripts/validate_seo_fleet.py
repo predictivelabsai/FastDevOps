@@ -52,7 +52,7 @@ def main() -> None:
         seo = seo_path.read_text(encoding="utf-8")
         landing = landing_path.read_text(encoding="utf-8")
         app = app_path.read_text(encoding="utf-8")
-        expected_url = f"https://{meta['slug']}.fastsme.com"
+        expected_url = meta.get("domain", f"https://{meta['slug']}.fastsme.com")
         checks = {
             "canonical base URL": expected_url in seo,
             "sitemap route": '"/sitemap.xml"' in seo,
