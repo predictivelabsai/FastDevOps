@@ -424,6 +424,13 @@ SEO_TARGETS = {
 def sync_seo(name: str, meta: dict, check: bool) -> list[str]:
     """Synchronise the SEO module and its application route registration."""
     repo = FASTCO / name
+    if meta.get("seo_source"):
+        source_path = repo / meta["seo_source"]
+        if not source_path.is_file():
+            return [meta["seo_source"]]
+        source = source_path.read_text()
+        required = ('@rt("/robots.txt")', '@rt("/sitemap.xml")')
+        return [] if all(marker in source for marker in required) else [meta["seo_source"]]
     seo_rel, app_rel, module, marker = SEO_TARGETS.get(
         name, ("web/seo.py", "web_app.py", "web.seo", '\nif __name__ == "__main__":')
     )

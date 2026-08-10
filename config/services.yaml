@@ -283,6 +283,46 @@ services:
     env:
       required: [DB_URL, XAI_API_KEY, TAVILY_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FROM_EMAIL]
       runtime: {APP_ENV: production, PORT: "5059", SERVICE_URL: https://vc.fastsme.com, FROM_NAME: FastVC, DIGEST_ENABLED: "0"}
+  fastsocial:
+    description: Personal-first social scheduling, publishing and analytics
+    repo: predictivelabsai/FastSocial
+    local_dir: FastSocial
+    port: 5062
+    domain: https://fastsocial.org
+    domains:
+      - https://fastsocial.org
+      - https://www.fastsocial.org
+    health: {path: /healthz}
+    database: fastsocial-postgres
+    env:
+      sources: [FastVC, FastFund]
+      required:
+        - DATABASE_URL
+        - APP_SECRET
+        - TOKEN_ENCRYPTION_KEY
+        - GOOGLE_CLIENT_ID
+        - GOOGLE_CLIENT_SECRET
+        - XAI_API_KEY
+        - R2_ENDPOINT
+        - R2_ACCESS_KEY_ID
+        - R2_SECRET_ACCESS_KEY
+        - R2_BUCKET
+      generate: [APP_SECRET, TOKEN_ENCRYPTION_KEY]
+      runtime:
+        APP_ENV: production
+        SERVICE_URL: https://fastsocial.org
+        PORT: "5062"
+        AUTO_CREATE_SCHEMA: "0"
+        SCHEDULER_ENABLED: "1"
+        DEFAULT_TIMEZONE: Europe/Tallinn
+        MEDIA_STORAGE: r2
+        R2_REGION: auto
+        R2_KEY_PREFIX: fastsocial
+        GOOGLE_REDIRECT_URI: https://fastsocial.org/auth/google/callback
+        XAI_BASE_URL: https://api.x.ai/v1
+        XAI_MODEL: grok-4-1-fast-reasoning
+        LINKEDIN_API_VERSION: "202606"
+        BLUESKY_APP_PASSWORD_ENABLED: "1"
   fasthelpdesk:
     repo: predictivelabsai/FastHelpdesk
     local_dir: FastHelpdesk

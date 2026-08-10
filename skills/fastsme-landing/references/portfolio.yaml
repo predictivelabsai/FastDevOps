@@ -236,3 +236,14 @@ apps:
     headline: Turn a clear idea into a compelling deck.
     description: Create, theme, organise, generate, and present slide decks from one focused workspace.
     features: [Deck and slide editor, Prompt-to-deck generation, Full-screen presenting]
+  FastSocial:
+    cohort: custom
+    seo_source: fastsocial/routes.py
+    slug: social
+    domain: https://fastsocial.org
+    accent: "#4f8f73"
+    tint: "#e6f1ec"
+    eyebrow: Personal-first social publishing
+    headline: Plan your voice. Publish with confidence.
+    description: Compose, schedule, publish, and measure content across X, LinkedIn, and Bluesky through direct or managed connections.
+    features: [Multi-network scheduling, Direct and managed integrations, Private media and normalized analytics]
