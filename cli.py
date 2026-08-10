@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import os
 import secrets
 import ssl
@@ -233,7 +234,11 @@ def cmd_env(args):
             }
             for key in env_config.get("generate", []):
                 if key not in remote_names and key not in variables:
-                    variables[key] = secrets.token_urlsafe(48)
+                    variables[key] = (
+                        base64.urlsafe_b64encode(os.urandom(32)).decode()
+                        if key.endswith("_ENCRYPTION_KEY")
+                        else secrets.token_urlsafe(48)
+                    )
             missing = [
                 key for key in env_config.get("required", [])
                 if key not in variables and key not in remote_names

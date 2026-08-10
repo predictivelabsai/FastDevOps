@@ -14,6 +14,30 @@ defaults:
     concurrency: 80
 
 services:
+  fastaccounts:
+    description: Open bookkeeping and accountant-ready accounting for the UK and Estonia
+    repo: predictivelabsai/FastAccounts
+    local_dir: FastAccounts
+    port: 5012
+    domain: https://accounts.fastsme.com
+    health: {path: /healthz}
+    volume: /data
+    database_schema: fast_accounts
+    env:
+      sources: [FastERP]
+      required: [DB_URL, FASTACCOUNTS_SECRET, FASTACCOUNTS_ENCRYPTION_KEY, FASTACCOUNTS_COMMIT, FASTACCOUNTS_BRANCH, FASTACCOUNTS_BUILD_DATE, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      generate: [FASTACCOUNTS_SECRET, FASTACCOUNTS_ENCRYPTION_KEY]
+      runtime:
+        FASTACCOUNTS_PORT: "5012"
+        FASTACCOUNTS_ENV_LABEL: production
+        FASTACCOUNTS_PUBLIC_URL: https://accounts.fastsme.com
+        FASTACCOUNTS_DATA_DIR: /data
+        DB_SCHEMA: fast_accounts
+        GOOGLE_REDIRECT_URI: https://accounts.fastsme.com/auth/google/callback
+        GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
+        FROM_EMAIL: info@fastsme.com
+        FASTACCOUNTS_CORS_ORIGINS: https://accounts.fastsme.com
+        FASTACCOUNTS_ALLOW_TEST_AUTH: "false"
   fastwiki:
     description: FastWiki open knowledge workspace
     repo: predictivelabsai/FastWiki
