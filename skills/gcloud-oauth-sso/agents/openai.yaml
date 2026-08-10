@@ -1,0 +1,4 @@
+interface:
+  display_name: "Google Cloud OAuth SSO"
+  short_description: "Configure and verify Google OAuth callbacks"
+  default_prompt: "Use $gcloud-oauth-sso to safely add and verify a Google OAuth callback for a FastSME application."

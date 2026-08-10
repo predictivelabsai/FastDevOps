@@ -9,6 +9,16 @@ Invoke the repository skill as:
 The installed skill source is
 [`skills/coolify-cicd/SKILL.md`](skills/coolify-cicd/SKILL.md).
 
+Configure or repair a Google OAuth callback with authenticated `gcloud`
+context, safe browser handoff, and a non-secret live verification probe:
+
+```text
+/skill gcloud-oauth-sso FastAccounts
+```
+
+The versioned workflow and audit helper live in
+[`skills/gcloud-oauth-sso/`](skills/gcloud-oauth-sso/).
+
 Create or refresh a product landing page and its Google SSO entry point with:
 
 ```text
