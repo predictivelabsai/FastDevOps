@@ -174,7 +174,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTSME_API_TOKEN]
+      generate: [FASTSME_API_TOKEN]
       runtime:
         FASTCLINIC_PORT: "5005"
         FASTCLINIC_DB: /data/fastclinic.sqlite
