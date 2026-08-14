@@ -174,11 +174,13 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTSME_API_TOKEN]
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTSME_API_TOKEN, DATABASE_URL_PROD]
       generate: [FASTSME_API_TOKEN]
       runtime:
         FASTCLINIC_PORT: "5005"
+        FASTCLINIC_DATABASE_BACKEND: postgresql
         FASTCLINIC_DB: /data/fastclinic.sqlite
+        FASTCLINIC_DB_SCHEMA: fast_clinic
         FASTCLINIC_SEO_SITE: https://fastclinic.dev
         MODEL_PROVIDER: xai
         GOOGLE_REDIRECT_URI: https://fastclinic.dev/auth/google/callback
