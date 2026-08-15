@@ -171,7 +171,8 @@ services:
       - https://fastclinic.dev
       - https://www.fastclinic.dev
       - https://clinic.fastsme.com
-    health: {path: /}
+      - https://api.fastclinic.dev
+    health: {path: /api/v1/health}
     volume: /data
     env:
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTSME_API_TOKEN, DATABASE_URL_PROD]
@@ -181,6 +182,7 @@ services:
         FASTCLINIC_DATABASE_BACKEND: postgresql
         FASTCLINIC_DB: /data/fastclinic.sqlite
         FASTCLINIC_DB_SCHEMA: fast_clinic
+        FASTCLINIC_API_PUBLIC_URL: https://api.fastclinic.dev
         FASTCLINIC_SEO_SITE: https://fastclinic.dev
         MODEL_PROVIDER: xai
         GOOGLE_REDIRECT_URI: https://fastclinic.dev/auth/google/callback
