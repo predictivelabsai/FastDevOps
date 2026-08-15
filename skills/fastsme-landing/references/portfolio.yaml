@@ -1,4 +1,14 @@
 apps:
+  FastVoice:
+    cohort: custom
+    slug: voice
+    domain: https://voice.fastsme.com
+    accent: "#6d28d9"
+    tint: "#f5f3ff"
+    eyebrow: Open voice automation
+    headline: Build voice agents you can see, test, and own.
+    description: Design conversational workflows, test them in the browser, connect your preferred AI and telephony providers, and deploy on infrastructure you control.
+    features: [Visual voice workflows, Browser and telephony calling, Bring-your-own AI providers]
   FastWiki:
     cohort: custom
     slug: wiki
