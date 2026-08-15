@@ -22,14 +22,17 @@ services:
     domain: https://fastfactoring.org
     health: {path: /healthz}
     env:
-      required: [DATABASE_URL_PROD, APP_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, XAI_API_KEY]
+      sources: [FastDevOps]
+      required: [DATABASE_URL_PROD, APP_SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, XAI_API_KEY, POSTMARK_API_TOKEN]
       generate: [APP_SECRET]
       runtime:
         APP_ENV: production
         PORT: "5055"
         GOOGLE_REDIRECT_URI: https://fastfactoring.org/auth/google/callback
         GOOGLE_REDIRECT_HOSTS: fastfactoring.org,factorio.co.uk
-        GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
+        GOOGLE_ALLOWED_EMAILS: ""
+        PUBLIC_URL: https://fastfactoring.org
+        FROM_EMAIL: info@predictivelabs.ai
   fastvoice:
     description: Open voice automation with visual workflows, browser calling and BYOK providers
     repo: predictivelabsai/FastVoice
