@@ -211,6 +211,8 @@ services:
       - https://www.fastclinic.dev
       - https://clinic.fastsme.com
       - https://api.fastclinic.dev
+      - https://fastclinic.health
+      - https://www.fastclinic.health
     health: {path: /api/v1/health}
     volume: /data
     env:
