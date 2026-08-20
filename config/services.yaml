@@ -255,8 +255,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
-      runtime: {FASTCRM_PORT: "5006", FASTCRM_DB: /data/fastcrm.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://crm.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://crm.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, BYOK_ENCRYPTION_KEY]
+      runtime: {FASTCRM_PORT: "5006", FASTCRM_DB: /data/fastcrm.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://crm.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://crm.fastsme.com, FROM_EMAIL: info@predictivelabs.ai, BYOK_DB: /data/byok.sqlite, BYOK_FREE_QUERY_LIMIT: "5"}
   fastdocs:
     repo: predictivelabsai/FastDocs
     local_dir: FastDocs
