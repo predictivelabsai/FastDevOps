@@ -285,8 +285,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
-      runtime: {FASTERP_PORT: "5011", FASTERP_DB: /data/fasterp.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://erp.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://erp.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, DB_URL]
+      runtime: {FASTERP_PORT: "5011", FASTERP_DB: /data/fasterp.sqlite, DB_SCHEMA: fast_erp, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://erp.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://erp.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastfpa:
     description: FastFPA financial planning and analysis
     repo: predictivelabsai/FastFPA
@@ -324,11 +324,15 @@ services:
     repo: predictivelabsai/FastVC
     local_dir: FastVC
     port: 5059
-    domain: https://vc.fastsme.com
+    domain: https://fastvc.org
+    domains:
+      - https://fastvc.org
+      - https://www.fastvc.org
+      - https://vc.fastsme.com
     health: {path: /healthz}
     env:
       required: [DB_URL, XAI_API_KEY, TAVILY_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FROM_EMAIL]
-      runtime: {APP_ENV: production, PORT: "5059", SERVICE_URL: https://vc.fastsme.com, FROM_NAME: FastVC, DIGEST_ENABLED: "0"}
+      runtime: {APP_ENV: production, PORT: "5059", SERVICE_URL: https://fastvc.org, FROM_NAME: FastVC, DIGEST_ENABLED: "0"}
   fastsocial:
     description: Personal-first social scheduling, publishing and analytics
     repo: predictivelabsai/FastSocial
@@ -387,8 +391,8 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
-      runtime: {FASTHR_PORT: "5010", FASTHR_DB: /data/fasthr.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://hrm.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://hrm.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTHR_SECRET, FASTHR_COMMIT, FASTHR_BRANCH, FASTHR_BUILD_DATE]
+      runtime: {FASTHR_PORT: "5010", FASTHR_DB: /data/fasthr.sqlite, FASTHR_UPLOAD_DIR: /data/uploads, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://hrm.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://hrm.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
   fastbi:
     description: FastBI open-source business intelligence and governed analytics
     repo: predictivelabsai/FastBI
@@ -510,3 +514,32 @@ services:
         GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
         GOVERNANCE_ADMIN_EMAILS: kaljuvee@gmail.com
         RUN_BACKGROUND_WORKERS: "true"
+  fastats:
+    description: FastATS AI-native applicant tracking system with explainable, assistive screening
+    repo: predictivelabsai/FastATS
+    local_dir: FastATS
+    port: 5020
+    domain: https://ats.fastsme.com
+    health: {path: /healthz}
+    volume: /data
+    limits_memory: 1G
+    env:
+      sources: [FastBI]
+      required: [FASTATS_SECRET, XAI_API_KEY, OPENAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      generate: [FASTATS_SECRET]
+      runtime:
+        MODEL_PROVIDER: xai
+        MODEL_NAME: grok-4-1-fast-reasoning
+        FASTATS_PORT: "5020"
+        FASTATS_DB: /data/fastats.sqlite
+        FASTATS_UPLOAD_DIR: /data/uploads
+        FASTATS_STORAGE_BACKEND: local
+        FASTATS_EMBEDDINGS_BACKEND: hosted
+        EMBEDDINGS_MODEL: text-embedding-3-small
+        EMBEDDINGS_DIM: "1536"
+        FASTATS_CHECKPOINTER: memory
+        FASTATS_EMAIL_BACKEND: postmark
+        FROM_EMAIL: info@fastsme.com
+        GOOGLE_REDIRECT_URI: https://ats.fastsme.com/auth/google/callback
+        GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
+        FASTATS_ADMIN_EMAIL: admin@fastats.example
