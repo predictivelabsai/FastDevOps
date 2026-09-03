@@ -104,6 +104,16 @@ apps:
     headline: Your team's files, organised and under control.
     description: Store, find, share, and govern files and folders with clear permissions and activity history.
     features: [Files and folders, Role-based sharing, Recent, starred, and recovery views]
+  FastDPS:
+    demo_gif: docs/demo/fastdps-walkthrough.gif
+    cohort: custom
+    slug: dps
+    accent: "#0f766e"
+    tint: "#f0fdfa"
+    eyebrow: Open dynamic procurement
+    headline: Run fair, flexible procurement without a heavyweight suite.
+    description: Create dynamic purchasing systems, continuously qualify suppliers, run call-off competitions, and keep every decision auditable.
+    features: [Continuous supplier admission, Governed call-off competitions, Confirm-before-write procurement copilot]
   FastERP:
     demo_gif: docs/demo/fasterp-walkthrough.gif
     slug: erp

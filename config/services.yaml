@@ -543,3 +543,28 @@ services:
         GOOGLE_REDIRECT_URI: https://ats.fastsme.com/auth/google/callback
         GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
         FASTATS_ADMIN_EMAIL: admin@fastats.example
+  fastdps:
+    description: Open-source chat-first dynamic purchasing and call-off procurement
+    repo: predictivelabsai/FastDPS
+    local_dir: FastDPS
+    port: 5024
+    domain: https://dps.fastsme.com
+    health: {path: /healthz}
+    volume: /data
+    database_schema: fast_dps
+    env:
+      sources: [FastClinic]
+      required: [DATABASE_URL_PROD, FASTDPS_SECRET, XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET]
+      generate: [FASTDPS_SECRET]
+      runtime:
+        FASTDPS_PORT: "5024"
+        FASTDPS_PUBLIC_URL: https://dps.fastsme.com
+        FASTDPS_ENV_LABEL: production
+        FASTDPS_DATA_DIR: /data
+        FASTDPS_DB: /data/fastdps.sqlite
+        FASTDPS_ALLOW_TEST_AUTH: "false"
+        DB_SCHEMA: fast_dps
+        LLM_BASE_URL: https://api.x.ai/v1
+        LLM_MODEL: grok-4-1-fast-reasoning
+        GOOGLE_REDIRECT_URI: https://dps.fastsme.com/auth/google/callback
+        GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
