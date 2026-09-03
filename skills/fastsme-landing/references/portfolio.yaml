@@ -204,8 +204,8 @@ apps:
     demo_gif: docs/fastlms-demo.gif
     cohort: custom
     slug: lms
-    accent: "#7c3aed"
-    tint: "#f5f3ff"
+    accent: "#256b62"
+    tint: "#f1f8f6"
     eyebrow: Learning management
     headline: Help every learner make visible progress.
     description: Deliver courses, lessons, quizzes, AI tutoring, school operations, and real-time engagement from one open platform.

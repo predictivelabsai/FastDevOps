@@ -417,6 +417,7 @@ services:
     local_dir: FastLMS
     port: 5001
     domain: https://lms.fastsme.com
+    domains: [https://lms.fastsme.com, https://fastlearn.fun]
     health: {path: /healthz}
     build: {type: nixpacks, start_command: "python main.py --host 0.0.0.0 --port 5001"}
     volume: /data
