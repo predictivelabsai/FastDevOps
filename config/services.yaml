@@ -580,7 +580,7 @@ services:
     env:
       sources: [FastDPS]
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
-      generate: [FASTCLM_SECRET, FASTCLM_ENCRYPTION_KEY, FASTCLM_BACKUP_ENCRYPTION_KEY, FASTCLM_API_TOKEN, FASTCLM_SCIM_TOKEN]
+      generate: [FASTCLM_SECRET, FASTCLM_ENCRYPTION_KEY, FASTCLM_BACKUP_ENCRYPTION_KEY, FASTCLM_API_TOKEN, FASTCLM_SCIM_TOKEN, SIGNWELL_WEBHOOK_TOKEN, DOCUSIGN_WEBHOOK_SECRET]
       runtime:
         FASTCLM_PORT: "5025"
         FASTCLM_PUBLIC_URL: https://clm.fastsme.com
@@ -602,4 +602,7 @@ services:
         GOOGLE_ALLOWED_DOMAINS: ""
         GOOGLE_ALLOWED_EMAILS: ""
         FROM_EMAIL: info@fastsme.com
+        SIGNWELL_API_BASE_URL: https://www.signwell.com/api/v1
         SIGNWELL_TEST_MODE: "true"
+        DOCUSIGN_API_BASE_URL: https://demo.docusign.net/restapi
+        DOCUSIGN_OAUTH_BASE_URL: https://account-d.docusign.com
