@@ -591,6 +591,8 @@ services:
         FASTCLM_ALLOW_TEST_AUTH: "false"
         FASTCLM_REQUIRE_EMAIL_VERIFICATION: "true"
         FASTCLM_FREE_QUERY_LIMIT: "5"
+        FASTCLM_REMINDER_SCHEDULER_ENABLED: "true"
+        FASTCLM_REMINDER_INTERVAL_SECONDS: "3600"
         XAI_BASE_URL: https://api.x.ai/v1
         XAI_MODEL: grok-4-1-fast-reasoning
         GOOGLE_REDIRECT_URI: https://clm.fastsme.com/auth/google/callback
