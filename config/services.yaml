@@ -580,7 +580,7 @@ services:
     env:
       sources: [FastDPS]
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
-      generate: [FASTCLM_SECRET, FASTCLM_ENCRYPTION_KEY, FASTCLM_API_TOKEN]
+      generate: [FASTCLM_SECRET, FASTCLM_ENCRYPTION_KEY, FASTCLM_API_TOKEN, FASTCLM_SCIM_TOKEN]
       runtime:
         FASTCLM_PORT: "5025"
         FASTCLM_PUBLIC_URL: https://clm.fastsme.com
