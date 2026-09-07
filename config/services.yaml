@@ -580,7 +580,7 @@ services:
     env:
       sources: [FastDPS]
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
-      generate: [FASTCLM_SECRET, FASTCLM_ENCRYPTION_KEY, FASTCLM_API_TOKEN, FASTCLM_SCIM_TOKEN]
+      generate: [FASTCLM_SECRET, FASTCLM_ENCRYPTION_KEY, FASTCLM_BACKUP_ENCRYPTION_KEY, FASTCLM_API_TOKEN, FASTCLM_SCIM_TOKEN]
       runtime:
         FASTCLM_PORT: "5025"
         FASTCLM_PUBLIC_URL: https://clm.fastsme.com
@@ -588,6 +588,9 @@ services:
         FASTCLM_DATA_DIR: /data
         FASTCLM_DB: /data/fastclm.sqlite
         FASTCLM_UPLOAD_DIR: /data/uploads
+        FASTCLM_STORAGE_BACKEND: local
+        FASTCLM_OCR_ENABLED: "true"
+        FASTCLM_OCR_LANGUAGE: eng
         FASTCLM_ALLOW_TEST_AUTH: "false"
         FASTCLM_REQUIRE_EMAIL_VERIFICATION: "true"
         FASTCLM_FREE_QUERY_LIMIT: "5"
