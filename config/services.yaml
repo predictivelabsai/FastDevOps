@@ -569,3 +569,32 @@ services:
         LLM_MODEL: grok-4-1-fast-reasoning
         GOOGLE_REDIRECT_URI: https://dps.fastsme.com/auth/google/callback
         GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
+  fastclm:
+    description: Open-source multi-tenant contract lifecycle management for SMEs
+    repo: predictivelabsai/FastCLM
+    local_dir: FastCLM
+    port: 5025
+    domain: https://clm.fastsme.com
+    health: {path: /healthz}
+    volume: /data
+    env:
+      sources: [FastDPS]
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      generate: [FASTCLM_SECRET, FASTCLM_ENCRYPTION_KEY, FASTCLM_API_TOKEN]
+      runtime:
+        FASTCLM_PORT: "5025"
+        FASTCLM_PUBLIC_URL: https://clm.fastsme.com
+        FASTCLM_ENV_LABEL: production
+        FASTCLM_DATA_DIR: /data
+        FASTCLM_DB: /data/fastclm.sqlite
+        FASTCLM_UPLOAD_DIR: /data/uploads
+        FASTCLM_ALLOW_TEST_AUTH: "false"
+        FASTCLM_REQUIRE_EMAIL_VERIFICATION: "true"
+        FASTCLM_FREE_QUERY_LIMIT: "5"
+        XAI_BASE_URL: https://api.x.ai/v1
+        XAI_MODEL: grok-4-1-fast-reasoning
+        GOOGLE_REDIRECT_URI: https://clm.fastsme.com/auth/google/callback
+        GOOGLE_ALLOWED_DOMAINS: ""
+        GOOGLE_ALLOWED_EMAILS: ""
+        FROM_EMAIL: info@fastsme.com
+        SIGNWELL_TEST_MODE: "true"

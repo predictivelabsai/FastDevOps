@@ -1,4 +1,13 @@
 apps:
+  FastCLM:
+    cohort: custom
+    slug: clm
+    accent: "#2457d6"
+    tint: "#eef4ff"
+    eyebrow: Open contract lifecycle management
+    headline: Know what you agreed—and what happens next.
+    description: Upload, review, approve, sign, and manage contracts, obligations, and renewals in one open workspace.
+    features: [Immutable contract versions, Governed review and approvals, Obligations renewals and notice dates]
   FastVoice:
     cohort: custom
     slug: voice
