@@ -132,6 +132,15 @@ apps:
     headline: One operational backbone for the whole business.
     description: Connect sales, purchasing, inventory, invoicing, payments, projects, expenses, and the general ledger.
     features: [Order to cash, Purchasing and inventory, Accounting and reporting]
+  FastShop:
+    cohort: custom
+    slug: shop
+    accent: "#087f5b"
+    tint: "#edf8f4"
+    eyebrow: Open commerce
+    headline: Own the storefront and the operation behind it.
+    description: Publish multi-channel catalogs, manage stock, convert carts, fulfil orders, and connect commerce to FastERP with an AI assistant on every page.
+    features: [Products variants and channel pricing, Stock-aware checkout and fulfilment, FastERP integration and grounded commerce copilot]
   FastAccounts:
     cohort: custom
     slug: accounts

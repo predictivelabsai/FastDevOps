@@ -285,8 +285,37 @@ services:
     health: {path: /}
     volume: /data
     env:
-      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, DB_URL]
+      required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, DB_URL, FASTSHOP_CONNECTOR_TOKEN]
+      generate: [FASTSHOP_CONNECTOR_TOKEN]
       runtime: {FASTERP_PORT: "5011", FASTERP_DB: /data/fasterp.sqlite, DB_SCHEMA: fast_erp, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://erp.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://erp.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+  fastshop:
+    description: FastHTML commerce storefront and merchant operations platform
+    repo: predictivelabsai/FastShop
+    local_dir: FastShop
+    port: 5025
+    domain: https://shop.fastsme.com
+    health: {path: /healthz}
+    database_schema: fast_shop
+    env:
+      sources: [FastERP]
+      required: [DB_URL, FASTSHOP_SESSION_SECRET, FASTSHOP_ENCRYPTION_KEY, FASTSME_API_TOKEN, FASTSHOP_CONNECTOR_TOKEN, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, XAI_API_KEY]
+      generate: [FASTSHOP_SESSION_SECRET, FASTSHOP_ENCRYPTION_KEY, FASTSME_API_TOKEN]
+      runtime:
+        FASTSHOP_ENV: production
+        FASTSHOP_HOST: 0.0.0.0
+        FASTSHOP_PORT: "5025"
+        FASTSHOP_PUBLIC_URL: https://shop.fastsme.com
+        FASTSHOP_AUTO_CREATE_SCHEMA: "0"
+        DB_SCHEMA: fast_shop
+        GOOGLE_REDIRECT_URI: https://shop.fastsme.com/auth/google/callback
+        FASTSHOP_ADMIN_EMAIL: kaljuvee@gmail.com
+        GOOGLE_ALLOWED_DOMAINS: ""
+        GOOGLE_ALLOWED_EMAILS: ""
+        MODEL_PROVIDER: xai
+        MODEL_NAME: grok-4-1-fast-reasoning
+        XAI_BASE_URL: https://api.x.ai/v1
+        FASTERP_BASE_URL: https://erp.fastsme.com
+        FROM_EMAIL: info@fastsme.com
   fastfpa:
     description: FastFPA financial planning and analysis
     repo: predictivelabsai/FastFPA
