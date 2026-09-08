@@ -205,11 +205,11 @@ services:
     repo: predictivelabsai/FastClinic
     local_dir: FastClinic
     port: 5005
-    domain: https://fastclinic.dev
+    domain: https://clinic.fastsme.com
     domains:
+      - https://clinic.fastsme.com
       - https://fastclinic.dev
       - https://www.fastclinic.dev
-      - https://clinic.fastsme.com
       - https://api.fastclinic.dev
       - https://fastclinic.health
       - https://www.fastclinic.health
@@ -324,15 +324,15 @@ services:
     repo: predictivelabsai/FastVC
     local_dir: FastVC
     port: 5059
-    domain: https://fastvc.org
+    domain: https://vc.fastsme.com
     domains:
+      - https://vc.fastsme.com
       - https://fastvc.org
       - https://www.fastvc.org
-      - https://vc.fastsme.com
     health: {path: /healthz}
     env:
       required: [DB_URL, XAI_API_KEY, TAVILY_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FROM_EMAIL]
-      runtime: {APP_ENV: production, PORT: "5059", SERVICE_URL: https://fastvc.org, FROM_NAME: FastVC, DIGEST_ENABLED: "0"}
+      runtime: {APP_ENV: production, PORT: "5059", SERVICE_URL: https://vc.fastsme.com, FROM_NAME: FastVC, DIGEST_ENABLED: "0"}
   fastsocial:
     description: Personal-first social scheduling, publishing and analytics
     repo: predictivelabsai/FastSocial
@@ -399,6 +399,9 @@ services:
     local_dir: FastBI
     port: 5008
     domain: https://fastbi.org
+    domains:
+      - https://fastbi.org
+      - https://bi.fastsme.com  # pending DNS — do not cut over until bi.fastsme.com resolves
     health: {path: /healthz}
     volume: /data
     env:
