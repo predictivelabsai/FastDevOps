@@ -650,6 +650,7 @@ services:
     env:
       required:
         - DB_URL
+        - RELEASE_SHA
         - APP_SECRET
         - JWT_SECRET
         - EXA_API_KEY
