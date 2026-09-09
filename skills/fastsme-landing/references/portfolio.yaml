@@ -76,6 +76,7 @@ apps:
     description: Run appointments, patient operations, billing, recall, revenue, and multi-specialty workflows from one clinical cockpit.
     features: [Appointments and availability, Patient and treatment operations, Billing and balanced ledgers]
   FastComps:
+    demo_gif: static/product-demo.gif
     slug: comps
     accent: "#177357"
     tint: "#f3f7f5"
