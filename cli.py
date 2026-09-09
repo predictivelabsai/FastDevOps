@@ -134,16 +134,20 @@ def provision_body(name: str, service: dict, env: dict) -> dict:
         "build_pack": build["type"],
         "ports_exposes": str(service["port"]),
         "name": name,
-        "domains": ",".join(service.get("domains", [service["domain"]])),
         "is_auto_deploy_enabled": True,
         "is_force_https_enabled": True,
         "autogenerate_domain": False,
         "instant_deploy": False,
     }
     if build["type"] == "dockerfile":
+        body["domains"] = ",".join(service.get("domains", [service["domain"]]))
         body["dockerfile_location"] = build["dockerfile"]
     elif build["type"] == "dockercompose":
         body["docker_compose_location"] = build.get("compose", "/docker-compose.yaml")
+        body["docker_compose_domains"] = [{
+            "name": build.get("service", "web"),
+            "domain": ",".join(service.get("domains", [service["domain"]])),
+        }]
     if build.get("start_command"):
         body["start_command"] = build["start_command"]
     return body
@@ -162,9 +166,13 @@ def application_settings(name: str, service: dict) -> dict:
         "limits_cpus": service.get("limits_cpus", "1"),
     }
     settings["custom_docker_run_options"] = ""
-    settings["domains"] = ",".join(
-        service.get("domains", [service["domain"]])
-    )
+    domains = ",".join(service.get("domains", [service["domain"]]))
+    if service["build"]["type"] == "dockercompose":
+        settings["docker_compose_domains"] = [{
+            "name": service["build"].get("service", "web"), "domain": domains,
+        }]
+    else:
+        settings["domains"] = domains
     return settings
 
 
