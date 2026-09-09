@@ -693,7 +693,7 @@ services:
       compose: /docker-compose.coolify.yaml
     env:
       sources: [FastClinic]
-      required: [DATABASE_URL_PROD, EXA_API_KEY, XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, SESSION_SECRET]
+      required: [DATABASE_URL_PROD, EXA_API_KEY, XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, SESSION_SECRET, POSTMARK_API_TOKEN]
       generate: [SESSION_SECRET]
       runtime:
         PORT: "5063"
@@ -708,3 +708,6 @@ services:
         GOOGLE_REDIRECT_URI: https://comps.fastsme.com/auth/google/callback
         GOOGLE_ALLOWED_DOMAINS: ""
         GOOGLE_ALLOWED_EMAILS: ""
+        FROM_EMAIL: info@fastsme.com
+        DAILY_SCAN_ENABLED: "true"
+        DAILY_SCAN_HOUR_UTC: "7"
