@@ -75,6 +75,14 @@ apps:
     headline: Modern clinical care, made personal.
     description: Run appointments, patient operations, billing, recall, revenue, and multi-specialty workflows from one clinical cockpit.
     features: [Appointments and availability, Patient and treatment operations, Billing and balanced ledgers]
+  FastComps:
+    slug: comps
+    accent: "#177357"
+    tint: "#f3f7f5"
+    eyebrow: Competitive intelligence
+    headline: See the market as evidence, not noise.
+    description: Track competitors, offerings, published prices and collection coverage across EEA markets with every claim linked to retained source evidence.
+    features: [Competitor coverage, Source-backed observations, Automated discovery and monitoring]
   FastCMS:
     demo_gif: static/screenshots/admin-tour.gif
     demo_url: /product-demo.gif

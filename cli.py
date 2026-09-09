@@ -142,6 +142,8 @@ def provision_body(name: str, service: dict, env: dict) -> dict:
     }
     if build["type"] == "dockerfile":
         body["dockerfile_location"] = build["dockerfile"]
+    elif build["type"] == "dockercompose":
+        body["docker_compose_location"] = build.get("compose", "/docker-compose.yaml")
     if build.get("start_command"):
         body["start_command"] = build["start_command"]
     return body

@@ -679,3 +679,28 @@ services:
         WATCHLIST_SCAN_INTERVAL_SECONDS: "60"
         DAILY_OBSERVATION_JOB_QUOTA: "25"
         DIGEST_ENABLED: "0"
+  fastcomps:
+    description: Source-backed clinics competitive intelligence across all 30 EEA markets
+    repo: predictivelabsai/FastComps
+    local_dir: FastComps
+    port: 5063
+    domain: https://comps.fastsme.com
+    health: {path: /healthz}
+    database_schema: fast_comps
+    limits_memory: 1G
+    build:
+      type: dockercompose
+      compose: /docker-compose.coolify.yaml
+    env:
+      sources: [FastClinic]
+      required: [DATABASE_URL_PROD, EXA_API_KEY, XAI_API_KEY]
+      runtime:
+        PORT: "5063"
+        DB_SCHEMA: fast_comps
+        SOURCE_DB_SCHEMA: fast_clinic
+        PUBLIC_URL: https://comps.fastsme.com
+        FASTCOMPS_WORKER_ENABLED: "true"
+        SYNC_INTERVAL_SECONDS: "300"
+        WORKER_POLL_SECONDS: "15"
+        XAI_BASE_URL: https://api.x.ai/v1
+        GROK_MODEL: grok-4-1-fast-non-reasoning
