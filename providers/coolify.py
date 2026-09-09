@@ -65,7 +65,8 @@ class Coolify:
 
     def environment_names(self, uuid: str) -> list[str]:
         rows = self.request("GET", f"/applications/{uuid}/envs") or []
-        return sorted(row.get("key", "") for row in rows if row.get("key"))
+        # Coolify returns production and preview rows for each logical key.
+        return sorted({row.get("key", "") for row in rows if row.get("key")})
 
     def sync_environment(self, uuid: str, variables: dict[str, str]) -> None:
         if not variables:

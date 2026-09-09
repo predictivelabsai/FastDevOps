@@ -558,7 +558,7 @@ services:
     limits_memory: 1G
     env:
       sources: [FastBI]
-      required: [FASTATS_SECRET, XAI_API_KEY, OPENAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
+      required: [FASTATS_SECRET, XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
       generate: [FASTATS_SECRET]
       runtime:
         MODEL_PROVIDER: xai
@@ -567,7 +567,7 @@ services:
         FASTATS_DB: /data/fastats.sqlite
         FASTATS_UPLOAD_DIR: /data/uploads
         FASTATS_STORAGE_BACKEND: local
-        FASTATS_EMBEDDINGS_BACKEND: hosted
+        FASTATS_EMBEDDINGS_BACKEND: fake
         EMBEDDINGS_MODEL: text-embedding-3-small
         EMBEDDINGS_DIM: "1536"
         FASTATS_CHECKPOINTER: memory
@@ -638,3 +638,42 @@ services:
         SIGNWELL_TEST_MODE: "true"
         DOCUSIGN_API_BASE_URL: https://demo.docusign.net/restapi
         DOCUSIGN_OAUTH_BASE_URL: https://account-d.docusign.com
+  fastcpi:
+    description: B2B web-market price intelligence with attributable observations and monitoring
+    repo: predictivelabsai/FastCPI
+    local_dir: FastCPI
+    port: 5011
+    domain: https://cpi.fastsme.com
+    health: {path: /health}
+    database_schema: fastcpi
+    limits_memory: 1G
+    env:
+      required:
+        - DB_URL
+        - APP_SECRET
+        - JWT_SECRET
+        - EXA_API_KEY
+        - XAI_API_KEY
+        - GOOGLE_CLIENT_ID
+        - GOOGLE_CLIENT_SECRET
+        - POSTMARK_API_TOKEN
+        - ADMIN_EMAIL
+        - ADMIN_PASSWORD
+      runtime:
+        PORT: "5011"
+        DB_SCHEMA: fastcpi
+        LOGIN: "1"
+        INVITE_ONLY: "1"
+        CORS_ALLOWED_ORIGINS: https://cpi.fastsme.com
+        SERVICE_URL_FASTCPI: https://cpi.fastsme.com
+        LLM_PROVIDER: xai
+        XAI_BASE_URL: https://api.x.ai/v1
+        GROK_MODEL: grok-4-1-fast-reasoning
+        GOOGLE_REDIRECT_URI: https://cpi.fastsme.com/auth/google/callback
+        GOOGLE_ALLOWED_DOMAINS: ""
+        GOOGLE_ALLOWED_EMAILS: ""
+        FROM_EMAIL: info@fastsme.com
+        FROM_NAME: FastCPI
+        WATCHLIST_SCANS_ENABLED: "1"
+        WATCHLIST_SCAN_INTERVAL_SECONDS: "3600"
+        DIGEST_ENABLED: "0"
