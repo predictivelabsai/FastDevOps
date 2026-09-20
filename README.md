@@ -18,11 +18,12 @@ pip install -e .
 cp .env.sample .env
 ```
 
-Create a Coolify API token at **Keys & Tokens → API Tokens**, then expose it
-only in the shell:
+Create a Coolify API token at **Keys & Tokens → API Tokens**, then store it in
+the user-level credential file shared by Fast* deployment wrappers:
 
 ```bash
-export COOLIFY_API_TOKEN=...
+install -m 600 /dev/null ~/.credentials
+# Add COOLIFY_BASE_URL and COOLIFY_API_TOKEN without committing or printing them.
 ```
 
 Run the complete fleet workflow from this repository:
@@ -35,8 +36,10 @@ python cli.py deploy --yes
 python cli.py status
 ```
 
-The CLI loads `COOLIFY_API_TOKEN` and an optional `COOLIFY_BASE_URL` from the
-ignored local `.env`. The CLI defaults to read-only operations. Deployment and environment writes
+The CLI loads `COOLIFY_API_TOKEN` and an optional `COOLIFY_BASE_URL` from
+`~/.credentials`, with the ignored local `.env` retained as a repository-local
+fallback. Explicit shell variables take precedence. The CLI defaults to
+read-only operations. Deployment and environment writes
 require an explicit command and confirmation; `--yes` is intended for CI.
 Provisioning is idempotent: existing applications are reconciled, missing
 applications and declared persistent volumes are created, and FastFunnel's

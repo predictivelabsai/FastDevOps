@@ -448,15 +448,19 @@ services:
     repo: predictivelabsai/FastLMS
     local_dir: FastLMS
     port: 5001
-    domain: https://lms.fastsme.com
-    domains: [https://lms.fastsme.com, https://fastlearn.fun, https://www.fastlearn.fun]
+    domain: https://fastlearn.school
+    domains:
+      - https://fastlearn.school
+      - https://fastlearn.fun
+      - https://www.fastlearn.fun
+      - https://lms.fastsme.com
     health: {path: /healthz}
     build: {type: nixpacks, start_command: "python main.py --host 0.0.0.0 --port 5001"}
     volume: /data
     database: fastlms-postgres
     env:
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN]
-      runtime: {MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://lms.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://lms.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+      runtime: {MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://fastlearn.school/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://fastlearn.school, FASTLEARN_PUBLIC_URL: https://fastlearn.school, FROM_EMAIL: info@predictivelabs.ai}
   fastmail:
     repo: predictivelabsai/FastMail
     local_dir: FastMail

@@ -31,6 +31,16 @@ Treat `COOLIFY_API_TOKEN`, `XAI_API_KEY`, GitHub secrets, passwords, and Pulumi
 secrets as values that may only live in secret stores or ignored local
 environment files.
 
+## Reusable local authentication
+
+Use `${HOME}/.credentials` as the machine-local Coolify credential store. It
+must be owned by the current user with mode `0600`. FastDevOps loads
+`COOLIFY_BASE_URL` and `COOLIFY_API_TOKEN` from it automatically; never copy
+their values into this skill, a repository, logs, commentary, or reports. Use
+the API token for routine inspection and deployment so browser login is not
+required. Browser authentication is only a fallback for token creation or UI
+features absent from the API.
+
 ## Canonical domain cutover
 
 1. Resolve the new hostname from its authoritative nameservers and confirm it

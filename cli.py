@@ -34,8 +34,11 @@ def load_local_env(path: Path) -> dict[str, str]:
 
 
 def load_control_plane_env() -> None:
-    for key, value in load_local_env(ROOT / ".env").items():
-        os.environ.setdefault(key, value)
+    # Share Coolify access across Fast* repositories without copying secrets
+    # into each checkout. Explicit shell variables retain highest precedence.
+    for path in (Path.home() / ".credentials", ROOT / ".env"):
+        for key, value in load_local_env(path).items():
+            os.environ.setdefault(key, value)
 
 
 def load_yaml(path: Path) -> dict:
