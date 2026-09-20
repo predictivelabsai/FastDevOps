@@ -471,6 +471,50 @@ services:
     env:
       required: [XAI_API_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, POSTMARK_API_TOKEN, FASTOFFICE_SSO_SECRET]
       runtime: {FASTMAIL_PORT: "5009", FASTMAIL_DB: /data/fastmail.sqlite, MODEL_PROVIDER: xai, GOOGLE_REDIRECT_URI: https://mail.fastsme.com/auth/google/callback, FASTSME_AUTH_DB: /data/fastsme-accounts.sqlite, FASTSME_PUBLIC_URL: https://mail.fastsme.com, FROM_EMAIL: info@predictivelabs.ai}
+  fastmedia:
+    description: Finespresso markets wire + native multi-provider TTS podcasts (Eleven v3 / OpenAI / Gemini / Boson)
+    repo: predictivelabsai/FastMedia
+    local_dir: FastMedia
+    port: 5020
+    domain: https://finespresso.org
+    domains:
+      - https://finespresso.org
+      - https://www.finespresso.org
+    health: {path: /healthz}
+    env:
+      sources: [FastMedia]
+      required: [DATABASE_URL_PROD, DATABASE_URL, DB_URL, XAI_API_KEY]
+      optional:
+        - ELEVENLABS_API_KEY
+        - 11LABS_API_KEY
+        - ELEVENLABS_VOICE_ID
+        - ELEVENLABS_MODEL_ID
+        - TTS_PROVIDER
+        - OPENAI_API_KEY
+        - OPENAI_TTS_VOICE
+        - OPENAI_TTS_MODEL
+        - GEMINI_API_KEY
+        - GEMINI_TTS_VOICE
+        - GEMINI_TTS_MODEL
+        - BOSON_API_KEY
+        - BOSON_TTS_VOICE
+        - BOSON_TTS_MODEL
+        - R2_ENDPOINT
+        - R2_ACCESS_KEY_ID
+        - R2_SECRET_ACCESS_KEY
+        - R2_BUCKET
+        - R2_REGION
+        - R2_PREFIX
+        - PUBLIC_URL
+        - XAI_MODEL
+      runtime:
+        PORT: "5020"
+        HOST: "0.0.0.0"
+        DB_SCHEMA: fast_media
+        TTS_PROVIDER: eleven
+        ELEVENLABS_MODEL_ID: eleven_v3
+        PUBLIC_URL: https://finespresso.org
+
   fastmeet:
     repo: predictivelabsai/FastMeet
     local_dir: FastMeet

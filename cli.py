@@ -249,6 +249,10 @@ def cmd_env(args):
                 for key in env_config.get("required", [])
                 if source.get(key)
             }
+            # Optional keys: push when present locally; never fail sync if absent
+            for key in env_config.get("optional", []):
+                if source.get(key):
+                    variables[key] = source[key]
             for key in env_config.get("generate", []):
                 if key not in remote_names and key not in variables:
                     variables[key] = (
