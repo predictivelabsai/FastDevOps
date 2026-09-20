@@ -715,3 +715,29 @@ services:
         FROM_EMAIL: info@fastsme.com
         DAILY_SCAN_ENABLED: "true"
         DAILY_SCAN_HOUR_UTC: "7"
+
+  fastmedia:
+    description: Bloomberg/FT-style Baltic and Finnish financial news with ElevenLabs market briefs
+    repo: predictivelabsai/FastMedia
+    local_dir: FastMedia
+    port: 5030
+    domain: https://media.fastsme.com
+    health: {path: /healthz}
+    database_schema: fast_media
+    env:
+      sources: [FastLMS, FastDevOps]
+      required:
+        - DB_URL
+        - DATABASE_URL
+        - DATABASE_URL_PROD
+        - DB_SCHEMA
+        - XAI_API_KEY
+        - ELEVENLABS_API_KEY
+      runtime:
+        PORT: "5030"
+        HOST: "0.0.0.0"
+        DB_SCHEMA: fast_media
+        PUBLIC_URL: https://media.fastsme.com
+        ELEVENLABS_VOICE_ID: JBFqnCBsd6RMkjVDRZzb
+        ELEVENLABS_MODEL_ID: eleven_multilingual_v2
+        XAI_MODEL: grok-3-mini
