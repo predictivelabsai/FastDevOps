@@ -731,6 +731,7 @@ services:
         DAILY_OBSERVATION_JOB_QUOTA: "25"
         DAILY_EXA_SEARCH_QUOTA: "100"
         DAILY_PAGE_FETCH_QUOTA: "1000"
+        DOMAIN_FETCHES_PER_MINUTE: "30"
         DIGEST_ENABLED: "0"
   fastcpi-worker:
     description: Dedicated FastCPI daily-watch and observation worker
@@ -758,6 +759,7 @@ services:
         WATCHLIST_SCAN_INTERVAL_SECONDS: "60"
         DAILY_EXA_SEARCH_QUOTA: "100"
         DAILY_PAGE_FETCH_QUOTA: "1000"
+        DOMAIN_FETCHES_PER_MINUTE: "30"
   fastcomps:
     description: Source-backed clinics competitive intelligence across all 30 EEA markets
     repo: predictivelabsai/FastComps
