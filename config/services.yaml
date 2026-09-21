@@ -716,7 +716,6 @@ services:
         PORT: "5011"
         DB_SCHEMA: fastcpi
         LOGIN: "1"
-        INVITE_ONLY: "0"
         CORS_ALLOWED_ORIGINS: https://cpi.fastsme.com
         SERVICE_URL_FASTCPI: https://cpi.fastsme.com
         LLM_PROVIDER: xai
@@ -727,10 +726,38 @@ services:
         GOOGLE_ALLOWED_EMAILS: ""
         FROM_EMAIL: info@fastsme.com
         FROM_NAME: FastCPI
-        WATCHLIST_SCANS_ENABLED: "1"
+        WATCHLIST_SCANS_ENABLED: "0"
         WATCHLIST_SCAN_INTERVAL_SECONDS: "60"
         DAILY_OBSERVATION_JOB_QUOTA: "25"
+        DAILY_EXA_SEARCH_QUOTA: "100"
+        DAILY_PAGE_FETCH_QUOTA: "1000"
         DIGEST_ENABLED: "0"
+  fastcpi-worker:
+    description: Dedicated FastCPI daily-watch and observation worker
+    repo: predictivelabsai/FastCPI
+    local_dir: FastCPI
+    worker: true
+    port: 5011
+    health: {path: /, enabled: false}
+    limits_memory: 1G
+    build:
+      type: dockerfile
+      dockerfile: /Dockerfile.worker
+      context: /
+      start_command: python -m scripts.watchlist_worker
+    env:
+      required:
+        - DB_URL
+        - RELEASE_SHA
+        - EXA_API_KEY
+        - POSTMARK_API_TOKEN
+      runtime:
+        DB_SCHEMA: fastcpi
+        FROM_EMAIL: info@fastsme.com
+        FROM_NAME: FastCPI
+        WATCHLIST_SCAN_INTERVAL_SECONDS: "60"
+        DAILY_EXA_SEARCH_QUOTA: "100"
+        DAILY_PAGE_FETCH_QUOTA: "1000"
   fastcomps:
     description: Source-backed clinics competitive intelligence across all 30 EEA markets
     repo: predictivelabsai/FastComps

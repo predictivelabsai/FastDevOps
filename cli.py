@@ -90,10 +90,21 @@ def health(url: str, path: str) -> str:
 def cmd_validate(_args):
     errors = []
     for name, service in select(None):
-        for field in ("repo", "port", "domain", "health"):
+        required = (
+            ("repo", "port", "health")
+            if service.get("worker")
+            else ("repo", "port", "domain", "health")
+        )
+        for field in required:
             if not service.get(field):
                 errors.append(f"{name}: missing {field}")
-        configured_domains = service.get("domains", [service.get("domain", "")])
+        if service.get("worker") and not service.get("build", {}).get("start_command"):
+            errors.append(f"{name}: worker requires build.start_command")
+        configured_domains = (
+            []
+            if service.get("worker")
+            else service.get("domains", [service.get("domain", "")])
+        )
         for domain in configured_domains:
             parsed = urlsplit(str(domain))
             if parsed.scheme != "https" or not parsed.hostname or parsed.path not in {"", "/"}:
@@ -116,7 +127,12 @@ def cmd_doctor(args):
     print(f"token: {'present' if os.getenv('COOLIFY_API_TOKEN') else 'missing'}")
     for name, service in select(args.service):
         local = ROOT.parent / service.get("local_dir", name)
-        print(f"{name}: repo={'present' if local.is_dir() else 'missing'} domain={service['domain']}")
+        target = (
+            "worker=no-public-route"
+            if service.get("worker")
+            else f"domain={service['domain']}"
+        )
+        print(f"{name}: repo={'present' if local.is_dir() else 'missing'} {target}")
 
 
 def require_app(api: Coolify, name: str) -> dict:
@@ -135,15 +151,16 @@ def provision_body(name: str, service: dict, env: dict) -> dict:
         "git_repository": f"https://github.com/{service['repo']}",
         "git_branch": service["branch"],
         "build_pack": build["type"],
-        "ports_exposes": str(service["port"]),
+        "ports_exposes": "" if service.get("worker") else str(service["port"]),
         "name": name,
         "is_auto_deploy_enabled": True,
-        "is_force_https_enabled": True,
+        "is_force_https_enabled": not service.get("worker", False),
         "autogenerate_domain": False,
         "instant_deploy": False,
     }
     if build["type"] == "dockerfile":
-        body["domains"] = ",".join(service.get("domains", [service["domain"]]))
+        if not service.get("worker"):
+            body["domains"] = ",".join(service.get("domains", [service["domain"]]))
         body["dockerfile_location"] = build["dockerfile"]
     elif build["type"] == "dockercompose":
         body["docker_compose_location"] = build.get("compose", "/docker-compose.yaml")
@@ -169,13 +186,20 @@ def application_settings(name: str, service: dict) -> dict:
         "limits_cpus": service.get("limits_cpus", "1"),
     }
     settings["custom_docker_run_options"] = ""
-    domains = ",".join(service.get("domains", [service["domain"]]))
-    if service["build"]["type"] == "dockercompose":
-        settings["docker_compose_domains"] = [{
-            "name": service["build"].get("service", "web"), "domain": domains,
-        }]
-    else:
-        settings["domains"] = domains
+    if service.get("worker"):
+        settings["ports_exposes"] = ""
+    if service["build"]["type"] == "dockerfile":
+        settings["dockerfile_location"] = service["build"]["dockerfile"]
+    if service["build"].get("start_command"):
+        settings["start_command"] = service["build"]["start_command"]
+    if not service.get("worker"):
+        domains = ",".join(service.get("domains", [service["domain"]]))
+        if service["build"]["type"] == "dockercompose":
+            settings["docker_compose_domains"] = [{
+                "name": service["build"].get("service", "web"), "domain": domains,
+            }]
+        else:
+            settings["domains"] = domains
     return settings
 
 
@@ -220,11 +244,17 @@ def cmd_status(args):
     for name, service in select(args.service):
         app = require_app(api, name)
         detail = api.application(app["uuid"])
-        print(
-            f"{name}: status={detail.get('status', 'unknown')} "
-            f"url={detail.get('fqdn') or service['domain']} "
-            f"health={health(service['domain'], service['health']['path'])}"
-        )
+        if service.get("worker"):
+            print(
+                f"{name}: status={detail.get('status', 'unknown')} "
+                "worker=no-public-route"
+            )
+        else:
+            print(
+                f"{name}: status={detail.get('status', 'unknown')} "
+                f"url={detail.get('fqdn') or service['domain']} "
+                f"health={health(service['domain'], service['health']['path'])}"
+            )
 
 
 def cmd_env(args):
