@@ -822,3 +822,30 @@ services:
         ELEVENLABS_VOICE_ID: JBFqnCBsd6RMkjVDRZzb
         ELEVENLABS_MODEL_ID: eleven_multilingual_v2
         XAI_MODEL: grok-3-mini
+  fastskills:
+    description: Open searchable catalog of Claude skills — Finance, Trading, Legal, Marketing
+    repo: predictivelabsai/FastSkills
+    local_dir: FastSkills
+    port: 5024
+    domain: https://fastskills.org
+    health: {path: /health}
+    volume: /data
+    database_schema: fast_skills
+    env:
+      sources: [FastDevOps]
+      required:
+        - FASTSKILLS_SECRET
+        - DATABASE_URL
+        - DATABASE_URL_PROD
+        - DB_SCHEMA
+        - GOOGLE_CLIENT_ID
+        - GOOGLE_CLIENT_SECRET
+      generate: [FASTSKILLS_SECRET]
+      runtime:
+        FASTSKILLS_ENV: production
+        FASTSKILLS_PORT: "5024"
+        DB_TYPE: postgresql
+        DB_SCHEMA: fast_skills
+        FASTSME_PUBLIC_URL: https://fastskills.org
+        FASTSME_AUTH_DB: /data/fastskills-accounts.sqlite
+        FROM_EMAIL: info@predictivelabs.ai
