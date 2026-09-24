@@ -849,3 +849,37 @@ services:
         FASTSME_PUBLIC_URL: https://fastskills.org
         FASTSME_AUTH_DB: /data/fastskills-accounts.sqlite
         FROM_EMAIL: info@predictivelabs.ai
+  fastpassword:
+    description: Private password & credentials manager (1Password-style vaults, SSO auto-unlock, Bearer REST API)
+    repo: predictivelabsai/FastPassword
+    local_dir: FastPassword
+    port: 5031
+    domain: https://password.fastsme.com
+    health: {path: /health}
+    volume: /data
+    database_schema: fast_password
+    env:
+      sources: [FastDevOps]
+      # FASTPASSWORD_RECOVERY_KEY is REQUIRED and must NEVER be generated/rotated:
+      # it decrypts every vault. Its value is supplied from FastPassword/.env and
+      # must be backed up out of band. Losing it makes all vaults undecryptable.
+      required:
+        - FASTPASSWORD_SECRET
+        - FASTPASSWORD_RECOVERY_KEY
+        - DATABASE_URL
+        - DATABASE_URL_PROD
+        - DB_SCHEMA
+        - GOOGLE_CLIENT_ID
+        - GOOGLE_CLIENT_SECRET
+      generate: []
+      runtime:
+        FASTPASSWORD_ENV: production
+        FASTPASSWORD_PORT: "5031"
+        DB_TYPE: postgresql
+        DB_SCHEMA: fast_password
+        FASTPASSWORD_PUBLIC_URL: https://password.fastsme.com
+        FASTSME_PUBLIC_URL: https://password.fastsme.com
+        FASTSME_AUTH_DB: /data/fastpassword-accounts.sqlite
+        FASTPASSWORD_OLD_DAYS: "365"
+        GOOGLE_ALLOWED_DOMAINS: ""
+        FROM_EMAIL: info@predictivelabs.ai
