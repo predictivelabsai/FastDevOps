@@ -884,3 +884,32 @@ services:
         FASTPASSWORD_OLD_DAYS: "365"
         GOOGLE_ALLOWED_DOMAINS: ""
         FROM_EMAIL: info@predictivelabs.ai
+  fastidentity:
+    description: First-party, consent-first identity resolution (pixel, identity graph, consent ledger, abandonment flows)
+    repo: predictivelabsai/FastIdentity
+    local_dir: FastIdentity
+    port: 5023
+    domain: https://identity.fastsme.com
+    health: {path: /health}
+    volume: /data
+    database_schema: fast_identity
+    env:
+      sources: [FastDevOps]
+      # SECRET_KEY and IDENTITY_HASH_SECRET are generated once for production and must
+      # not be rotated casually: rotating IDENTITY_HASH_SECRET unlinks stored device
+      # signals and hashed suppression entries.
+      required:
+        - ADMIN_PASSWORD
+        - ADMIN_API_TOKEN
+        - DATABASE_URL
+      generate: [SECRET_KEY, IDENTITY_HASH_SECRET]
+      runtime:
+        DB_SOURCE: psql
+        DB_SCHEMA: fast_identity
+        FASTIDENTITY_PORT: "5023"
+        PUBLIC_BASE_URL: https://identity.fastsme.com
+        ALLOWED_ORIGINS: https://identity.fastsme.com
+        ADMIN_EMAIL: admin@fastsme.com
+        DATA_REGION: uk
+        REQUIRE_ANALYTICS_CONSENT: "true"
+        DATABASE_PATH: /data/fastidentity.db
