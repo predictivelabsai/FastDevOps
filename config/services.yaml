@@ -902,6 +902,8 @@ services:
         - ADMIN_PASSWORD
         - ADMIN_API_TOKEN
         - DATABASE_URL
+        - GOOGLE_CLIENT_ID
+        - GOOGLE_CLIENT_SECRET
       generate: [SECRET_KEY, IDENTITY_HASH_SECRET]
       runtime:
         DB_SOURCE: psql
@@ -913,3 +915,7 @@ services:
         DATA_REGION: uk
         REQUIRE_ANALYTICS_CONSENT: "true"
         DATABASE_PATH: /data/fastidentity.db
+        GOOGLE_REDIRECT_URI: https://identity.fastsme.com/auth/google/callback
+        # Unknown Google accounts are auto-provisioned as admin only when allow-listed.
+        GOOGLE_ALLOWED_DOMAINS: predictivelabs.ai,predictivelabs.co.uk,fastsme.com
+        GOOGLE_ALLOWED_EMAILS: kaljuvee@gmail.com
